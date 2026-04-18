@@ -1,0 +1,2 @@
+"""OpenTravel local CLI package."""
+

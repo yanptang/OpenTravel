@@ -1,0 +1,15 @@
+{
+  "origin_city": "Gothenburg",
+  "destination": "Iceland",
+  "start_date": "2026-05-10",
+  "end_date": "2026-05-19",
+  "arrival_mode": "flight",
+  "travelers": 4,
+  "transport_mode": "self_drive",
+  "budget_level": "budget",
+  "must_do": [
+    "whale watching",
+    "glacier hiking"
+  ],
+  "notes": "Ring road trip from Keflavik arrival. Need practical and coherent pacing."
+}
