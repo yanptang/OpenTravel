@@ -1,26 +1,20 @@
 # OpenTravel 本地 CLI 版本
 
-这是 OpenTravel 的本地优先原型，目标是先把“需求输入 -> 行程生成 -> 规则校验 -> 局部修改 -> 导出结果”这条主链路跑通。
-
-当前版本适合：
-
-- 自己本地直接使用，不依赖前端页面
-- 面试时展示 Agent 工程能力
-- 在不接实时 API 的前提下先验证产品形态
+OpenTravel 本地 CLI 版本用于验证“旅行需求输入 -> 行程生成 -> 规则校验 -> 局部修改 -> 结果导出”的完整闭环。当前实现以本地可用为优先，不依赖前端页面，也不依赖实时外部 API。
 
 ## 当前能力
 
-- 输入前校验，避免缺少关键旅行信息就进模型
+- 输入前校验，避免缺少关键旅行信息就进入生成流程
 - 支持 `slot-based JSON` 行程结构
-- 支持行程后校验，检查时间、结构和 must-do 覆盖情况
+- 支持行程后校验，检查时间、结构和 `must-do` 覆盖情况
 - 支持本地 Ollama 模型直连
 - 支持 `daily` 分段生成模式，逐天生成后合并
-- 支持终端内交互修改 slot
+- 支持终端内交互修改 `slot`
 - 支持导出 `plan.json` 和 `plan.txt`
 
 ## 必填输入
 
-请求文件里需要包含以下字段：
+请求文件中需要包含以下字段：
 
 - `origin_city`
 - `destination`
@@ -54,7 +48,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-如果你要使用本地模型，还需要安装并启动 Ollama，然后拉取模型：
+本地模型运行前，需要先安装并启动 Ollama，再拉取模型：
 
 ```bash
 ollama pull qwen3.5:4b
@@ -68,7 +62,7 @@ ollama pull qwen3.5:4b
 python main.py --input sample_request.json --planner-mode daily
 ```
 
-默认模型是：
+默认模型：
 
 - `ollama/qwen3.5:4b`
 
@@ -78,7 +72,7 @@ python main.py --input sample_request.json --planner-mode daily
 python main.py --input sample_request.json --no-llm
 ```
 
-这个模式不会调用模型，而是直接用代码里的骨架生成器产出结果，适合调试规则和结构。
+该模式不会调用模型，而是直接使用代码中的骨架生成器产出结果，适合调试规则和结构。
 
 ### 3. 更稳的分段模式
 
@@ -86,12 +80,12 @@ python main.py --input sample_request.json --no-llm
 python main.py --input sample_request.json --planner-mode daily
 ```
 
-这个模式先生成一个行程骨架，再逐天生成并合并。对小模型更友好，也更容易局部失败、局部兜底。
+该模式先生成行程骨架，再逐天生成并合并。对小模型更友好，也更容易局部失败、局部兜底。
 
 ## 输出文件
 
 - `outputs/plan.json`：结构化行程结果
-- `outputs/plan.txt`：给人看的按天攻略
+- `outputs/plan.txt`：按天展示的可读攻略
 
 ## 交互编辑
 
@@ -121,26 +115,26 @@ done
 
 - 请求字段是否齐全
 - 日期范围是否合法
-- 每一天是否存在 slots
-- 每一天是否以 hotel slot 收尾
-- slot 时间格式是否正确
-- slot 是否有重叠
-- must-do 是否出现在行程里
+- 每一天是否存在 `slots`
+- 每一天是否以 hotel `slot` 收尾
+- `slot` 时间格式是否正确
+- `slot` 是否有重叠
+- `must-do` 是否出现在行程里
 
 ## 本地模型说明
 
-当前默认直连 Ollama 原生接口，不再依赖 LiteLLM 作为主路径。
+当前主路径直连 Ollama 原生接口，不再依赖 LiteLLM 作为主调用链路。
 
-原因很简单：
+原因包括：
 
 - `qwen3.5:4b` 在 LiteLLM 路径里容易出现 `content` 为空的问题
 - 直接调用 Ollama 更稳定
-- `daily` 模式对小模型更适合
+- `daily` 模式对小模型更友好
 
 ## 进一步优化方向
 
 1. 增加 per-day budget cap 检查
 2. 增加地理距离和车程时长校验
 3. 增加用户偏好记忆
-4. 增加更细的 slot 重排能力
+4. 增加更细的 `slot` 重排能力
 5. 如果未来接实时工具，再加入航班、酒店和地图查询
