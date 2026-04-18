@@ -7,6 +7,7 @@ from .models import ValidationResult
 
 
 def validate_plan(plan: dict[str, Any]) -> ValidationResult:
+    # 行程后校验：结构、时间、收尾、must-do 覆盖都在这里兜底。
     errors: list[str] = []
     errors.extend(_validate_top_level(plan))
     if errors:
@@ -41,6 +42,7 @@ def _validate_top_level(plan: dict[str, Any]) -> list[str]:
 
 
 def _validate_day(day: dict[str, Any]) -> list[str]:
+    # 每天至少要有 slot，且最后一个 slot 必须是 hotel。
     errors: list[str] = []
     for key in ["day", "date", "overnight_city", "slots"]:
         if key not in day:
@@ -60,6 +62,7 @@ def _validate_day(day: dict[str, Any]) -> list[str]:
 
 
 def _validate_slot_order(day: dict[str, Any]) -> list[str]:
+    # 校验 slot 时间合法性和相互重叠问题。
     errors: list[str] = []
     intervals: list[tuple[datetime, datetime, int]] = []
 
@@ -116,6 +119,7 @@ def _validate_must_do_coverage(
     must_do: list[str],
     seen_texts: list[str],
 ) -> list[str]:
+    # must-do 是用户核心诉求，必须在最终行程里被覆盖到。
     errors: list[str] = []
     merged = " ".join(seen_texts)
     for item in must_do:
@@ -129,6 +133,7 @@ def _validate_must_do_coverage(
 
 
 def _item_covered(item: str, merged_text: str) -> bool:
+    # 做一个轻量级的文本匹配，避免同义表达导致误判。
     if item in merged_text:
         return True
 

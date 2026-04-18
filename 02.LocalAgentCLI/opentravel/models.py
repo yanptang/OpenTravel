@@ -38,6 +38,7 @@ class PlannerConfig:
     use_llm: bool = True
     model: str = "ollama/qwen3.5:4b"
     api_base: str = "http://localhost:11434"
+    planner_mode: str = "daily"
     temperature: float = 0.2
     max_tokens: int = 4096
     request_timeout_sec: int = 900

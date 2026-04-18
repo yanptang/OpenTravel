@@ -15,6 +15,7 @@ from opentravel.renderer import render_text
 
 
 def main() -> int:
+    # 命令行入口：负责读取需求、执行生成、校验、导出和可选编辑。
     base_dir = Path(__file__).resolve().parent
     parser = argparse.ArgumentParser(description="OpenTravel Local CLI")
     parser.add_argument("--input", default="sample_request.json")
@@ -23,6 +24,7 @@ def main() -> int:
     parser.add_argument("--no-llm", action="store_true")
     parser.add_argument("--model", default="ollama/qwen3.5:4b")
     parser.add_argument("--api-base", default="http://localhost:11434")
+    parser.add_argument("--planner-mode", default="daily", choices=["daily", "whole"])
     parser.add_argument("--max-tokens", type=int, default=4096)
     parser.add_argument("--timeout-sec", type=int, default=900)
     parser.add_argument("--refine-retries", type=int, default=2)
@@ -48,15 +50,18 @@ def main() -> int:
         use_llm=(not args.no_llm),
         model=args.model,
         api_base=args.api_base,
+        planner_mode=args.planner_mode,
         max_tokens=max(128, args.max_tokens),
         request_timeout_sec=max(30, args.timeout_sec),
         refine_retries=max(0, args.refine_retries),
     )
 
+    # 先生成整份计划，底层会根据 planner_mode 决定是 whole 还是 daily。
     plan = generate_plan(request, config)
 
     validation = validate_plan(plan)
     retries = 0
+    # 如果真实模型输出不合格，最多尝试修正几轮。
     while (
         config.use_llm
         and (not validation.valid)
@@ -78,6 +83,7 @@ def main() -> int:
         print("Plan validation passed.")
 
     if args.edit:
+        # 进入终端交互编辑模式，支持删除、修改和重看结果。
         plan = edit_plan_interactively(plan)
         validation = validate_plan(plan)
         print("Post-edit validation:", "PASS" if validation.valid else "FAIL")
@@ -85,6 +91,7 @@ def main() -> int:
             for err in validation.errors:
                 print(f"- {err}")
 
+    # 导出结构化 JSON，便于后续做程序化处理。
     output_path = (
         Path(args.output).resolve()
         if args.output
@@ -94,6 +101,7 @@ def main() -> int:
     output_path.write_text(json.dumps(plan, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"Saved plan JSON to: {output_path}")
 
+    # 导出人类可读版本，方便直接查看和分享。
     render_output_path = (
         Path(args.render_output).resolve()
         if args.render_output

@@ -16,6 +16,7 @@ def generate_with_model(
     max_tokens: int,
     expect_json: bool,
 ) -> dict[str, Any] | None:
+    # 主调用入口：Ollama 走原生接口，其他模型路由再回退到 LiteLLM。
     if config.model.startswith("ollama/"):
         return _generate_with_ollama_chat(
             system_prompt=system_prompt,
@@ -45,6 +46,7 @@ def _generate_with_ollama_chat(
     max_tokens: int,
     expect_json: bool,
 ) -> dict[str, Any] | None:
+    # 这里绕过 LiteLLM，直接打 Ollama 原生 /api/chat，避免兼容层把 content 变空。
     model = config.model.split("/", 1)[1]
     api_base = config.api_base.rstrip("/")
     if api_base.endswith("/v1"):
@@ -54,6 +56,7 @@ def _generate_with_ollama_chat(
     payload: dict[str, Any] = {
         "model": model,
         "stream": False,
+        # `think:false` 可以明显减少长思考占用，让正文更容易返回。
         "think": False,
         "messages": [
             {"role": "system", "content": system_prompt},
@@ -125,6 +128,7 @@ def _generate_with_litellm(
 
 
 def _parse_json_content(content: str) -> dict[str, Any] | None:
+    # 兼容模型偶尔夹带解释文本的情况，尽量从正文中截取 JSON。
     content = content.strip()
     try:
         data = json.loads(content)

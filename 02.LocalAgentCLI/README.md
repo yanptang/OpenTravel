@@ -1,17 +1,26 @@
-# OpenTravel Local CLI (V1)
+# OpenTravel 本地 CLI 版本
 
-This is a local-first travel planning agent prototype.
+这是 OpenTravel 的本地优先原型，目标是先把“需求输入 -> 行程生成 -> 规则校验 -> 局部修改 -> 导出结果”这条主链路跑通。
 
-It supports:
+当前版本适合：
 
-- request input validation before generation
-- slot-based itinerary JSON generation
-- plan validation with rule checks
-- refine pass (optional, via local LLM)
-- interactive slot editing in terminal
-- export to JSON and human-readable text
+- 自己本地直接使用，不依赖前端页面
+- 面试时展示 Agent 工程能力
+- 在不接实时 API 的前提下先验证产品形态
 
-Required request fields include:
+## 当前能力
+
+- 输入前校验，避免缺少关键旅行信息就进模型
+- 支持 `slot-based JSON` 行程结构
+- 支持行程后校验，检查时间、结构和 must-do 覆盖情况
+- 支持本地 Ollama 模型直连
+- 支持 `daily` 分段生成模式，逐天生成后合并
+- 支持终端内交互修改 slot
+- 支持导出 `plan.json` 和 `plan.txt`
+
+## 必填输入
+
+请求文件里需要包含以下字段：
 
 - `origin_city`
 - `destination`
@@ -22,7 +31,21 @@ Required request fields include:
 - `transport_mode`
 - `must_do`
 
-## 1) Setup
+推荐额外补充：
+
+- `budget_level`
+- `notes`
+- `special_requirements`
+
+## 目录说明
+
+- `main.py`：命令行入口，负责读取输入、执行校验、生成计划、导出结果。
+- `opentravel/`：核心业务模块，包含模型调用、验证、渲染和交互编辑。
+- `sample_request.json`：示例输入文件。
+- `outputs/`：默认输出目录，存放生成结果。
+- `requirements.txt`：Python 依赖。
+
+## 环境准备
 
 ```bash
 cd 02.LocalAgentCLI
@@ -31,58 +54,59 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-If you use local Ollama + LiteLLM, make sure your local model is available.
-
-## 2) Run with local model
+如果你要使用本地模型，还需要安装并启动 Ollama，然后拉取模型：
 
 ```bash
-python main.py --input sample_request.json --edit
+ollama pull qwen3.5:4b
 ```
 
-Default model config:
+## 运行方式
 
-- model: `ollama/qwen3.5:4b`
-- api base: `http://localhost:11434`
-- max tokens: `4096`
-- timeout: `900s`
-
-Override when needed:
+### 1. 使用本地模型
 
 ```bash
-python main.py --model ollama/qwen3.5:4b --api-base http://localhost:11434 --edit
+python main.py --input sample_request.json --planner-mode daily
 ```
 
-If model generation is slow for long trips, tune:
+默认模型是：
+
+- `ollama/qwen3.5:4b`
+
+### 2. 使用 mock 模式
 
 ```bash
-python main.py --model ollama/qwen3.5:4b --max-tokens 1200 --timeout-sec 900 --edit
+python main.py --input sample_request.json --no-llm
 ```
 
-## 3) Run without model (mock mode)
+这个模式不会调用模型，而是直接用代码里的骨架生成器产出结果，适合调试规则和结构。
+
+### 3. 更稳的分段模式
 
 ```bash
-python main.py --input sample_request.json --no-llm --edit
+python main.py --input sample_request.json --planner-mode daily
 ```
 
-This is useful when your model is unavailable. The tool still generates a complete itinerary structure.
+这个模式先生成一个行程骨架，再逐天生成并合并。对小模型更友好，也更容易局部失败、局部兜底。
 
-## 4) Output files
+## 输出文件
 
-- `outputs/plan.json`: structured itinerary
-- `outputs/plan.txt`: readable day-by-day guide
+- `outputs/plan.json`：结构化行程结果
+- `outputs/plan.txt`：给人看的按天攻略
 
-## 5) Interactive edit commands
+## 交互编辑
 
-```text
-help
-show
-show day <n>
-delete <day> <slot_id>
-set <day> <slot_id> <field> <value>
-done
-```
+运行时加上 `--edit` 后，可以在终端里修改结果。
 
-Example:
+支持命令：
+
+- `help`
+- `show`
+- `show day <n>`
+- `delete <day> <slot_id>`
+- `set <day> <slot_id> <field> <value>`
+- `done`
+
+示例：
 
 ```text
 set 3 2 title Drive to glacier base camp
@@ -91,20 +115,32 @@ delete 5 4
 done
 ```
 
-## 6) Current v1 validation rules
+## 校验规则
 
-- required request fields present
-- valid request date range
-- each day has slots
-- each day ends with a hotel slot
-- slot time format is `HH:MM`
-- slot time range must be increasing
-- no slot overlap per day
-- must-do preferences must appear in generated content
+当前代码会检查：
 
-## 7) Suggested next steps
+- 请求字段是否齐全
+- 日期范围是否合法
+- 每一天是否存在 slots
+- 每一天是否以 hotel slot 收尾
+- slot 时间格式是否正确
+- slot 是否有重叠
+- must-do 是否出现在行程里
 
-1. add per-day budget cap checks
-2. add distance/time heuristics checks
-3. add persistent user profile memory (JSON/SQLite)
-4. add tool adapters for map/flight/hotel APIs when budget allows
+## 本地模型说明
+
+当前默认直连 Ollama 原生接口，不再依赖 LiteLLM 作为主路径。
+
+原因很简单：
+
+- `qwen3.5:4b` 在 LiteLLM 路径里容易出现 `content` 为空的问题
+- 直接调用 Ollama 更稳定
+- `daily` 模式对小模型更适合
+
+## 进一步优化方向
+
+1. 增加 per-day budget cap 检查
+2. 增加地理距离和车程时长校验
+3. 增加用户偏好记忆
+4. 增加更细的 slot 重排能力
+5. 如果未来接实时工具，再加入航班、酒店和地图查询
