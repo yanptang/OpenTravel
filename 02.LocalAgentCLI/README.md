@@ -5,6 +5,7 @@ OpenTravel 本地 CLI 版本用于验证“旅行需求输入 -> 行程生成 ->
 ## 当前能力
 
 - 输入前校验，避免缺少关键旅行信息就进入生成流程
+- 支持多轮澄清，按“基础信息 -> 目的地活动 -> 通用偏好”三层推进
 - 支持 `slot-based JSON` 行程结构
 - 支持行程后校验，检查时间、结构和 `must-do` 覆盖情况
 - 支持本地 Ollama 模型直连
@@ -66,6 +67,9 @@ python main.py --input sample_request.json --planner-mode daily
 
 - `ollama/qwen3.5:4b`
 
+运行时如果处于交互式终端，会先进入澄清流程。
+澄清层按三层推进：先补齐基础信息，再基于目的地生成本地特色活动候选，最后细化预算、节奏和住宿偏好。
+
 ### 2. 使用 mock 模式
 
 ```bash
@@ -81,6 +85,14 @@ python main.py --input sample_request.json --planner-mode daily
 ```
 
 该模式先生成行程骨架，再逐天生成并合并。对小模型更友好，也更容易局部失败、局部兜底。
+
+### 4. 跳过澄清
+
+```bash
+python main.py --input sample_request.json --planner-mode daily --no-clarify
+```
+
+该模式会跳过终端交互澄清，适合自动化测试或批处理场景。
 
 ## 输出文件
 
@@ -120,6 +132,15 @@ done
 - `slot` 时间格式是否正确
 - `slot` 是否有重叠
 - `must-do` 是否出现在行程里
+
+澄清流程会优先补齐：
+
+- 出发地、目的地、日期、人数、到达方式、交通方式、must-do
+- 预算层级
+- 旅行节奏
+- 住宿偏好
+- 每天驾驶时长上限
+- 当地特色活动偏好
 
 ## 本地模型说明
 

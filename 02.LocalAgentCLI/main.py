@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 from typing import Any
 
+from opentravel.clarifier import clarify_request
 from opentravel.editor import edit_plan_interactively
 from opentravel.input_validation import validate_request
 from opentravel.models import PlannerConfig
@@ -28,6 +29,7 @@ def main() -> int:
     parser.add_argument("--max-tokens", type=int, default=4096)
     parser.add_argument("--timeout-sec", type=int, default=900)
     parser.add_argument("--refine-retries", type=int, default=2)
+    parser.add_argument("--no-clarify", action="store_true")
     parser.add_argument("--edit", action="store_true")
     args = parser.parse_args()
 
@@ -39,13 +41,6 @@ def main() -> int:
         return 1
     request = _load_json(request_path)
 
-    req_result = validate_request(request)
-    if not req_result.valid:
-        print("Input validation failed:")
-        for err in req_result.errors:
-            print(f"- {err}")
-        return 1
-
     config = PlannerConfig(
         use_llm=(not args.no_llm),
         model=args.model,
@@ -55,6 +50,16 @@ def main() -> int:
         request_timeout_sec=max(30, args.timeout_sec),
         refine_retries=max(0, args.refine_retries),
     )
+
+    if not args.no_clarify:
+        request = clarify_request(request, config=config)
+
+    req_result = validate_request(request)
+    if not req_result.valid:
+        print("Input validation failed:")
+        for err in req_result.errors:
+            print(f"- {err}")
+        return 1
 
     # 先生成整份计划，底层会根据 planner_mode 决定是 whole 还是 daily。
     plan = generate_plan(request, config)
