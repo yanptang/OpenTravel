@@ -1,0 +1,13 @@
+{
+  "origin_city": "天津",
+  "destination": "北京",
+  "start_date": "2026-04-20",
+  "end_date": "2026-04-21",
+  "arrival_mode": "train",
+  "travelers": 2,
+  "transport_mode": "public_transport",
+  "must_do": ["故宫", "北京烤鸭"],
+  "budget_level": "mid",
+  "notes": "两日游，简单一点，优先体验城市核心景点。",
+  "special_requirements": "尽量不要太赶，住宿安排方便返程。"
+}

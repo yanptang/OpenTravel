@@ -17,33 +17,35 @@ def clarify_request(
         return request
 
     clarified = dict(request)
+    language = _resolve_language(clarified, config)
     if not isinstance(clarified.get("preferences"), dict):
         clarified["preferences"] = {}
 
-    print("\n开始需求澄清")
-    print("第1层：补齐基础信息")
-    print("第2层：围绕目的地确认本地特色活动")
-    print("第3层：细化预算、节奏和住宿偏好\n")
+    labels = _clarify_labels(language)
+    print(f"\n{labels['heading']}")
+    print(labels["step_1"])
+    print(labels["step_2"])
+    print(f"{labels['step_3']}\n")
 
-    _fill_required_fields(clarified)
-    _collect_activity_preferences(clarified, config=config)
-    _collect_general_preferences(clarified)
-    _collect_extra_notes(clarified)
+    _fill_required_fields(clarified, language)
+    _collect_activity_preferences(clarified, config=config, language=language)
+    _collect_general_preferences(clarified, language)
+    _collect_extra_notes(clarified, language)
 
     return clarified
 
 
-def _fill_required_fields(request: dict[str, Any]) -> None:
-    print("先补齐这次行程的基础信息。")
+def _fill_required_fields(request: dict[str, Any], language: str) -> None:
+    print(_clarify_labels(language)["fill_required"])
     required_prompts = {
-        "origin_city": "出发地",
-        "destination": "目的地",
-        "start_date": "出行开始日期 (YYYY-MM-DD)",
-        "end_date": "出行结束日期 (YYYY-MM-DD)",
-        "arrival_mode": "到达方式（flight/train/ferry/self_drive/mixed）",
-        "travelers": "出行人数",
-        "transport_mode": "旅行交通方式（self_drive/public_transport/mixed）",
-        "must_do": "必须安排的活动或体验（逗号分隔）",
+        "origin_city": _field_label("origin_city", language),
+        "destination": _field_label("destination", language),
+        "start_date": _field_label("start_date", language),
+        "end_date": _field_label("end_date", language),
+        "arrival_mode": _field_label("arrival_mode", language),
+        "travelers": _field_label("travelers", language),
+        "transport_mode": _field_label("transport_mode", language),
+        "must_do": _field_label("must_do", language),
     }
 
     for field, label in required_prompts.items():
@@ -53,35 +55,38 @@ def _fill_required_fields(request: dict[str, Any]) -> None:
         request[field] = value
 
 
-def _collect_general_preferences(request: dict[str, Any]) -> None:
+def _collect_general_preferences(request: dict[str, Any], language: str) -> None:
     preferences = _preferences_dict(request)
-    print("\n继续细化通用偏好。")
+    print(f"\n{_clarify_labels(language)['general_prefs']}")
 
     if not _has_value(preferences.get("budget_level")):
         preferences["budget_level"] = _prompt_choice(
-            "预算层级",
-            "希望采用哪种预算层级？",
+            _field_label("budget_level", language),
+            _question("budget_level", language),
             ["budget", "mid", "premium"],
-            ["经济", "均衡", "舒适"],
+            _display_labels("budget_level", language),
             default="budget",
+            language=language,
         )
 
     if not _has_value(preferences.get("pace_preference")):
         preferences["pace_preference"] = _prompt_choice(
-            "节奏偏好",
-            "这趟行程更偏向哪种节奏？",
+            _field_label("pace_preference", language),
+            _question("pace_preference", language),
             ["relaxed", "balanced", "intense"],
-            ["轻松", "均衡", "紧凑"],
+            _display_labels("pace_preference", language),
             default="balanced",
+            language=language,
         )
 
     if not _has_value(preferences.get("accommodation_preference")):
         preferences["accommodation_preference"] = _prompt_choice(
-            "住宿偏好",
-            "更偏向哪种住宿类型？",
+            _field_label("accommodation_preference", language),
+            _question("accommodation_preference", language),
             ["guesthouse", "apartment", "hotel", "mixed"],
-            ["民宿/Guesthouse", "公寓/Apartment", "酒店/Hotel", "混合"],
+            _display_labels("accommodation_preference", language),
             default="mixed",
+            language=language,
         )
 
     if (
@@ -89,27 +94,30 @@ def _collect_general_preferences(request: dict[str, Any]) -> None:
         and request.get("transport_mode") == "self_drive"
     ):
         preferences["max_drive_hours_per_day"] = _prompt_int(
-            "每天驾驶上限",
-            "如果这次主要采用自驾，每天可接受的驾驶时长上限是几小时？",
+            _field_label("max_drive_hours_per_day", language),
+            _question("max_drive_hours_per_day", language),
             default=4,
             minimum=1,
             maximum=10,
+            language=language,
         )
 
 
 def _collect_activity_preferences(
     request: dict[str, Any],
     config: PlannerConfig | None = None,
+    language: str = "zh",
 ) -> None:
     preferences = _preferences_dict(request)
-    print("\n先看目的地，再确认本地特色活动偏好。")
+    print(f"\n{_clarify_labels(language)['activity_stage']}")
     if _has_value(preferences.get("activity_preferences")):
         return
 
     wants_local = _prompt_yes_no(
-        "当地特色活动",
-        "是否希望优先加入当地特色活动？",
+        _field_label("activity_preferences", language),
+        _question("activity_preferences", language),
         default=True,
+        language=language,
     )
     if not wants_local:
         preferences["activity_preferences"] = []
@@ -117,9 +125,10 @@ def _collect_activity_preferences(
 
     candidates = _activity_candidates(request, config=config)
     selected = _prompt_multi_select(
-        "活动偏好",
-        "请选择想优先安排的活动（可多选，输入编号用逗号分隔）",
+        _field_label("activity_preferences", language),
+        _question("activity_selection", language),
         candidates,
+        language=language,
     )
     preferences["activity_preferences"] = selected
 
@@ -132,52 +141,57 @@ def _collect_activity_preferences(
         request["must_do"] = merged
 
 
-def _collect_extra_notes(request: dict[str, Any]) -> None:
+def _collect_extra_notes(request: dict[str, Any], language: str) -> None:
     preferences = _preferences_dict(request)
-    print("\n最后补充特殊需求。")
+    print(f"\n{_clarify_labels(language)['special_notes']}")
     if _has_value(preferences.get("special_requirements")):
         return
 
     note = _prompt_optional(
-        "补充说明",
-        "还有没有必须注意的特殊需求？例如不想赶路、想保留自由活动时间、要控制住宿预算等。留空表示没有。",
+        _field_label("special_requirements", language),
+        _question("special_requirements", language),
+        language=language,
     )
     if note:
         preferences["special_requirements"] = note
 
 
-def _prompt_required(field: str, label: str) -> Any:
+def _prompt_required(field: str, label: str, language: str) -> Any:
     while True:
         if field in {"arrival_mode", "transport_mode"}:
             if field == "arrival_mode":
                 return _prompt_choice(
                     label,
-                    "请选择一种到达方式：",
+                    _question(field, language),
                     ["flight", "train", "ferry", "self_drive", "mixed"],
-                    ["飞机", "火车", "轮渡", "自驾到达", "混合"],
+                    _display_labels(field, language),
                     default="flight",
+                    language=language,
                 )
             return _prompt_choice(
                 label,
-                "请选择一种旅行交通方式：",
+                _question(field, language),
                 ["self_drive", "public_transport", "mixed"],
-                ["自驾", "公共交通", "混合"],
+                _display_labels(field, language),
                 default="self_drive",
+                language=language,
             )
 
         if field == "travelers":
             return _prompt_int(
                 label,
-                "请输入出行人数：",
+                _question(field, language),
                 default=4,
                 minimum=1,
                 maximum=12,
+                language=language,
             )
 
         if field == "must_do":
             raw = _prompt_optional(
                 label,
-                "请输入必须安排的活动或体验，多个内容用逗号分隔。",
+                _question(field, language),
+                language=language,
             )
             items = _split_items(raw)
             if items:
@@ -185,7 +199,7 @@ def _prompt_required(field: str, label: str) -> Any:
             print("must_do 不能为空，请至少输入一个活动或体验。")
             continue
 
-        raw = _prompt_optional(label, f"请输入{label}：")
+        raw = _prompt_optional(label, _question(field, language), language=language)
         if raw:
             if field in {"start_date", "end_date"}:
                 if _valid_date(raw):
@@ -202,11 +216,12 @@ def _prompt_choice(
     values: list[str],
     display_labels: list[str],
     default: str,
+    language: str,
 ) -> str:
     print(f"\n{field_label}")
     print(question)
     for idx, (value, display_label) in enumerate(zip(values, display_labels), start=1):
-        suffix = " (默认)" if value == default else ""
+        suffix = " (默认)" if language == "zh" and value == default else ""
         print(f"  {idx}. {display_label}{suffix}")
 
     while True:
@@ -220,7 +235,7 @@ def _prompt_choice(
         print("输入无效，请重新选择。")
 
 
-def _prompt_yes_no(field_label: str, question: str, default: bool) -> bool:
+def _prompt_yes_no(field_label: str, question: str, default: bool, language: str) -> bool:
     default_text = "Y/n" if default else "y/N"
     print(f"\n{field_label}")
     print(question)
@@ -241,6 +256,7 @@ def _prompt_int(
     default: int,
     minimum: int,
     maximum: int,
+    language: str,
 ) -> int:
     print(f"\n{field_label}")
     print(question)
@@ -258,19 +274,21 @@ def _prompt_int(
         print(f"请输入 {minimum} 到 {maximum} 之间的整数。")
 
 
-def _prompt_optional(field_label: str, question: str) -> str:
+def _prompt_optional(field_label: str, question: str, language: str) -> str:
     print(f"\n{field_label}")
     return input(f"{question}\n> ").strip()
 
 
-def _prompt_multi_select(field_label: str, question: str, candidates: list[str]) -> list[str]:
+def _prompt_multi_select(
+    field_label: str, question: str, candidates: list[str], language: str
+) -> list[str]:
     print(f"\n{field_label}")
     print(question)
     for idx, candidate in enumerate(candidates, start=1):
         print(f"  {idx}. {candidate}")
 
     while True:
-        raw = input("请输入编号，例如 1,3,4；直接回车表示不选择：").strip()
+        raw = input(_question("activity_selection_input", language)).strip()
         if not raw:
             return []
         selected: list[str] = []
@@ -289,7 +307,7 @@ def _prompt_multi_select(field_label: str, question: str, candidates: list[str])
                 selected.append(item)
         if ok:
             return selected
-        print("输入无效，请重新选择。")
+        print(_message("invalid_choice", language))
 
 
 def _activity_candidates(
@@ -366,11 +384,113 @@ def _build_activity_prompt(request: dict[str, Any]) -> str:
         "must_do": request.get("must_do", []),
         "notes": request.get("notes", ""),
     }
-    return (
-        "请根据目的地和行程信息，列出适合这个目的地的本地特色活动候选，"
-        "用于后续向用户追问偏好。只输出 JSON。\n"
-        f"{json.dumps(payload, ensure_ascii=False, indent=2)}"
-    )
+    language = str(request.get("language", "zh"))
+    if language == "en":
+        instruction = (
+            "List local activity candidates that fit the destination and trip context. "
+            "These will be used for follow-up preference questions. Output JSON only.\n"
+        )
+    else:
+        instruction = (
+            "请根据目的地和行程信息，列出适合这个目的地的本地特色活动候选，"
+            "用于后续向用户追问偏好。只输出 JSON。\n"
+        )
+    return instruction + f"{json.dumps(payload, ensure_ascii=False, indent=2)}"
+
+
+def _resolve_language(request: dict[str, Any], config: PlannerConfig | None) -> str:
+    if config and config.preferred_language in {"zh", "en"}:
+        return config.preferred_language
+    return str(request.get("language", "zh"))
+
+
+def _clarify_labels(language: str) -> dict[str, str]:
+    if language == "en":
+        return {
+            "heading": "\nStart trip clarification",
+            "step_1": "Step 1: complete the required basics",
+            "step_2": "Step 2: confirm destination-specific activity preferences",
+            "step_3": "Step 3: refine budget, pace, and lodging preferences",
+            "fill_required": "First, fill in the core trip information.",
+            "general_prefs": "Now refine general preferences.",
+            "activity_stage": "Now confirm local activity preferences based on the destination.",
+            "special_notes": "Finally, add any special requirements.",
+        }
+    return {
+        "heading": "\n开始需求澄清",
+        "step_1": "第1层：补齐基础信息",
+        "step_2": "第2层：围绕目的地确认本地特色活动",
+        "step_3": "第3层：细化预算、节奏和住宿偏好",
+        "fill_required": "先补齐这次行程的基础信息。",
+        "general_prefs": "继续细化通用偏好。",
+        "activity_stage": "先看目的地，再确认本地特色活动偏好。",
+        "special_notes": "最后补充特殊需求。",
+    }
+
+
+def _field_label(field: str, language: str) -> str:
+    mapping = {
+        "origin_city": ("Origin city", "出发地"),
+        "destination": ("Destination", "目的地"),
+        "start_date": ("Start date (YYYY-MM-DD)", "出行开始日期 (YYYY-MM-DD)"),
+        "end_date": ("End date (YYYY-MM-DD)", "出行结束日期 (YYYY-MM-DD)"),
+        "arrival_mode": ("Arrival mode", "到达方式"),
+        "travelers": ("Travelers", "出行人数"),
+        "transport_mode": ("Travel mode", "旅行交通方式"),
+        "must_do": ("Must-do items", "必须安排的活动或体验"),
+        "budget_level": ("Budget level", "预算层级"),
+        "pace_preference": ("Pace preference", "节奏偏好"),
+        "accommodation_preference": ("Accommodation preference", "住宿偏好"),
+        "max_drive_hours_per_day": ("Max driving hours per day", "每天驾驶上限"),
+        "activity_preferences": ("Local activity preferences", "当地特色活动"),
+        "special_requirements": ("Special requirements", "补充说明"),
+    }
+    en, zh = mapping.get(field, (field, field))
+    return en if language == "en" else zh
+
+
+def _question(field: str, language: str) -> str:
+    mapping = {
+        "origin_city": ("Please enter the origin city:", "请输入出发地："),
+        "destination": ("Please enter the destination:", "请输入目的地："),
+        "start_date": ("Please enter the start date:", "请输入出行开始日期："),
+        "end_date": ("Please enter the end date:", "请输入出行结束日期："),
+        "arrival_mode": ("Choose an arrival mode:", "请选择一种到达方式："),
+        "travelers": ("Please enter the number of travelers:", "请输入出行人数："),
+        "transport_mode": ("Choose the travel mode for the trip:", "请选择一种旅行交通方式："),
+        "must_do": ("Enter must-do items, separated by commas.", "请输入必须安排的活动或体验，多个内容用逗号分隔。"),
+        "budget_level": ("Which budget level do you prefer?", "希望采用哪种预算层级？"),
+        "pace_preference": ("What pace do you prefer?", "这趟行程更偏向哪种节奏？"),
+        "accommodation_preference": ("Which lodging type do you prefer?", "更偏向哪种住宿类型？"),
+        "max_drive_hours_per_day": ("What is the maximum driving time per day?", "如果这次主要采用自驾，每天可接受的驾驶时长上限是几小时？"),
+        "activity_preferences": ("Do you want to prioritize local activities?", "是否希望优先加入当地特色活动？"),
+        "activity_selection": ("Select the activities you want to prioritize.", "请选择想优先安排的活动（可多选，输入编号用逗号分隔）"),
+        "activity_selection_input": ("Enter numbers like 1,3,4; press Enter for none: ", "请输入编号，例如 1,3,4；直接回车表示不选择："),
+        "special_requirements": ("Any special requirements to note?", "还有没有必须注意的特殊需求？例如不想赶路、想保留自由活动时间、要控制住宿预算等。留空表示没有。"),
+    }
+    en, zh = mapping.get(field, (field, field))
+    return en if language == "en" else zh
+
+
+def _display_labels(field: str, language: str) -> list[str]:
+    mapping = {
+        "arrival_mode": [["flight", "train", "ferry", "self_drive", "mixed"], ["Flight", "Train", "Ferry", "Self-drive arrival", "Mixed"]],
+        "transport_mode": [["self_drive", "public_transport", "mixed"], ["Self-drive", "Public transport", "Mixed"]],
+        "budget_level": [["budget", "mid", "premium"], ["Budget", "Balanced", "Comfort"]],
+        "pace_preference": [["relaxed", "balanced", "intense"], ["Relaxed", "Balanced", "Intense"]],
+        "accommodation_preference": [["guesthouse", "apartment", "hotel", "mixed"], ["Guesthouse", "Apartment", "Hotel", "Mixed"]],
+    }
+    default = [field]
+    values = mapping.get(field, [default, default])[1 if language == "en" else 0]
+    return list(values)
+
+
+def _message(key: str, language: str) -> str:
+    mapping = {
+        "invalid_choice": ("Invalid input, please choose again.", "输入无效，请重新选择。"),
+    }
+    en, zh = mapping.get(key, (key, key))
+    return en if language == "en" else zh
 
 
 _ACTIVITY_CANDIDATE_SYSTEM_PROMPT = """

@@ -39,6 +39,7 @@ class PlannerConfig:
     model: str = "ollama/qwen3.5:4b"
     api_base: str = "http://localhost:11434"
     planner_mode: str = "daily"
+    preferred_language: str = "auto"
     temperature: float = 0.2
     max_tokens: int = 4096
     request_timeout_sec: int = 900
