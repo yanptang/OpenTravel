@@ -13,7 +13,7 @@
 
   <p>
     <a href="./LocalAgentCLI/README.md"><img src="https://img.shields.io/badge/Local%20CLI-使用说明-111827?style=for-the-badge" alt="Local CLI" /></a>
-    <a href="./archive/prework/next_phase_plan.md"><img src="https://img.shields.io/badge/Next%20Phase-开发计划-0F766E?style=for-the-badge" alt="Next Phase" /></a>
+    <a href="next_phase_plan.md"><img src="https://img.shields.io/badge/Next%20Phase-开发计划-0F766E?style=for-the-badge" alt="Next Phase" /></a>
   </p>
 </div>
 
@@ -72,21 +72,6 @@
 > 如果大家仍然有探索世界的欲望，那我们就还需要旅行。
 >
 > 虽然我们已经可以通过图片和视频看到世界上任何一个地方的阳光，沙滩，城堡，雪山，通过数据量化空气，风，温度。但我们仍然需要站在那里，让阳光真正的照到你的身体，感受风吹在脸上的感觉，听到海浪的声音，闻到花香，吃到当地的美食，和当地人交流，感受当下。这是我认为的旅行的意义。
-
----
-
-## 为什么做这个项目
-
-<table>
-  <tr>
-    <td>
-      这个项目的出发点，是把高质量旅行攻略里最有价值的部分沉淀成一个可重复使用的系统。
-    </td>
-    <td>
-      它既要像一个旅游管家一样能追问、能规划、能衔接，也要像一个工程系统一样能校验、能重排、能持续演进。
-    </td>
-  </tr>
-</table>
 
 ---
 
