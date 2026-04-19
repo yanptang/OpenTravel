@@ -194,6 +194,7 @@ Day 1 (2026-05-10) | Overnight: Reykjavik
 | 文档 | 作用 |
 | --- | --- |
 | [LocalAgentCLI/README.md](./LocalAgentCLI/README.md) | 当前版本的运行说明 |
+| [archive/CLI/README.md](./archive/CLI/README.md) | CLI 开发示例说明 |
 | [LocalAgentCLI/开发日志.md](./LocalAgentCLI/开发日志.md) | 项目推进记录 |
 | [LocalAgentCLI/项目结构说明.md](./LocalAgentCLI/项目结构说明.md) | 代码结构说明 |
 | [archive/](./archive/) | 前置工作与历史原型归档 |
