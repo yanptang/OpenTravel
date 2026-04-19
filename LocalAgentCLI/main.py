@@ -5,7 +5,6 @@ from __future__ import annotations
 import argparse
 import json
 import re
-from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -13,6 +12,7 @@ from opentravel.clarifier import clarify_request
 from opentravel.editor import edit_plan_interactively
 from opentravel.input_validation import validate_request
 from opentravel.models import PlannerConfig
+from opentravel.progress import ProgressReporter
 from opentravel.plan_validation import validate_plan
 from opentravel.planner import generate_plan
 from opentravel.refiner import refine_plan
@@ -35,6 +35,7 @@ def main() -> int:
     parser.add_argument("--timeout-sec", type=int, default=900)
     parser.add_argument("--refine-retries", type=int, default=2)
     parser.add_argument("--no-clarify", action="store_true")
+    parser.add_argument("--no-progress", action="store_true")
     parser.add_argument("--edit", action="store_true")
     args = parser.parse_args()
 
@@ -48,6 +49,8 @@ def main() -> int:
     request = _load_json(request_path)
     detected_language = detect_language(request)
     request["language"] = detected_language
+    progress = ProgressReporter(enabled=(not args.no_progress), language=detected_language)
+    progress.stage("已读取需求文件，开始初始化", percent=5)
 
     config = PlannerConfig(
         use_llm=(not args.no_llm),
@@ -61,11 +64,14 @@ def main() -> int:
     )
 
     if not args.no_clarify:
-        request = clarify_request(request, config=config)
+        progress.stage("进入多轮澄清", percent=10)
+        request = clarify_request(request, config=config, progress=progress)
         detected_language = detect_language(request)
         request["language"] = detected_language
         config.preferred_language = detected_language
+        progress.language = detected_language
 
+    progress.stage("校验输入需求", percent=20)
     req_result = validate_request(request)
     if not req_result.valid:
         print("Input validation failed:")
@@ -76,6 +82,7 @@ def main() -> int:
     artifact_dir = _resolve_artifact_dir(base_dir, args.artifact_dir)
     artifact_dir.mkdir(parents=True, exist_ok=True)
 
+    progress.stage("保存输入快照", percent=25)
     request_snapshot = artifact_dir / "request.json"
     request_snapshot.write_text(
         json.dumps(request, ensure_ascii=False, indent=2),
@@ -83,7 +90,9 @@ def main() -> int:
     )
     print(f"Saved request snapshot to: {request_snapshot}")
 
-    plan = generate_plan(request, config)
+    progress.stage("开始生成行程", percent=30)
+    plan = generate_plan(request, config, progress=progress)
+    progress.stage("开始校验行程", percent=85)
     validation = validate_plan(plan)
     retries = 0
 
@@ -104,6 +113,7 @@ def main() -> int:
         print("Plan validation passed.")
 
     if args.edit:
+        progress.stage("进入手动编辑", percent=90)
         plan = edit_plan_interactively(plan)
         validation = validate_plan(plan)
         print("Post-edit validation:", "PASS" if validation.valid else "FAIL")
@@ -123,6 +133,7 @@ def main() -> int:
     )
     print(f"Saved plan JSON to: {output_path}")
 
+    progress.stage("渲染 Markdown 攻略", percent=95)
     render_output_path = (
         Path(args.render_output).resolve()
         if args.render_output
@@ -136,6 +147,7 @@ def main() -> int:
     print(f"Saved human-readable itinerary to: {render_output_path}")
     print("\n--- Preview ---\n")
     print(rendered_text)
+    progress.stage("完成", percent=100)
     return 0
 
 
@@ -150,8 +162,7 @@ def _load_json(path: Path) -> dict[str, Any]:
 def _resolve_artifact_dir(base_dir: Path, artifact_dir: str) -> Path:
     if artifact_dir:
         return Path(artifact_dir).resolve()
-    stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-    return (base_dir / "outputs" / "runs" / stamp).resolve()
+    return (base_dir / "outputs" / "latest").resolve()
 
 
 def detect_language(request: dict[str, Any]) -> str:

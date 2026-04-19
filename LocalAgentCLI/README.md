@@ -15,6 +15,7 @@ OpenTravel 本地 CLI 版本用于验证“旅行需求输入 -> 多轮澄清 ->
 - 支持导出 `plan.json`
 - 支持导出 Markdown 行程文档 `plan.md`
 - 支持按运行批次落盘到独立目录，避免覆盖历史结果
+- 支持实时阶段进度日志，显示“当前在做什么”和每个 day 的耗时
 
 ## 语言策略
 
@@ -130,6 +131,15 @@ python main.py --input tianjin_beijing_request.json --no-llm --no-clarify --rend
 ```
 
 该模式会把 `request.json`、`plan.json`、`plan.md` 写入单独目录，不会覆盖历史结果。
+如果不指定 `--artifact-dir`，默认会写到 `outputs/latest/`。
+
+### 8. 关闭进度日志
+
+```bash
+python main.py --input tianjin_beijing_request.json --no-progress
+```
+
+如果你不想看阶段日志，可以关闭。默认会在 stderr 打印轻量进度，不影响最终 Markdown 输出。
 
 ## 输出文件
 
@@ -140,6 +150,11 @@ python main.py --input tianjin_beijing_request.json --no-llm --no-clarify --rend
 - `plan.md`：按天展示的可读攻略
 
 如果把 `--render-format` 设为 `text`，则会输出 `plan.txt`。
+
+当前仓库里还保留了一个更干净的快捷入口：
+
+- `outputs/latest/`：当前最新的一版结果，也是默认输出目录
+- `outputs/final/`：我认为足够稳定、值得保留的正式样例
 
 ## 交互编辑
 
@@ -199,12 +214,12 @@ done
 下面这个样例用于验证中文输入、中文输出和 Markdown 文档导出：
 
 - 输入：`tianjin_beijing_request.json`
-- 输出目录：`outputs/runs/tianjin-beijing-2day-v2/`
+- 输出目录：`outputs/final/tianjin-beijing-progress/`
 
 运行命令：
 
 ```bash
-python main.py --input tianjin_beijing_request.json --no-llm --no-clarify --planner-mode daily --render-format markdown --artifact-dir outputs/runs/tianjin-beijing-2day-v2
+python main.py --input tianjin_beijing_request.json --no-clarify --planner-mode daily --render-format markdown --artifact-dir outputs/final/tianjin-beijing-progress
 ```
 
 ## 进一步优化方向

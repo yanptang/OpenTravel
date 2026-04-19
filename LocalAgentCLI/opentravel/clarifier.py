@@ -6,11 +6,13 @@ from typing import Any
 
 from .llm_client import generate_with_model
 from .models import PlannerConfig
+from .progress import ProgressReporter
 
 
 def clarify_request(
     request: dict[str, Any],
     config: PlannerConfig | None = None,
+    progress: ProgressReporter | None = None,
 ) -> dict[str, Any]:
     # 澄清层只在交互式终端中启用；非交互场景保持原始请求不变。
     if not _is_interactive():
@@ -22,6 +24,8 @@ def clarify_request(
         clarified["preferences"] = {}
 
     labels = _clarify_labels(language)
+    if progress:
+        progress.stage(labels["heading"].strip(), percent=12)
     print(f"\n{labels['heading']}")
     print(labels["step_1"])
     print(labels["step_2"])
@@ -31,6 +35,8 @@ def clarify_request(
     _collect_activity_preferences(clarified, config=config, language=language)
     _collect_general_preferences(clarified, language)
     _collect_extra_notes(clarified, language)
+    if progress:
+        progress.stage("澄清完成", percent=18)
 
     return clarified
 

@@ -3,10 +3,12 @@ from __future__ import annotations
 import json
 from dataclasses import replace
 from datetime import datetime, timedelta
+from time import monotonic
 from typing import Any
 
 from .llm_client import generate_with_model
 from .models import PlannerConfig
+from .progress import ProgressReporter
 
 
 SYSTEM_PROMPT = """
@@ -107,16 +109,22 @@ def build_user_prompt(request: dict[str, Any]) -> str:
     )
 
 
-def generate_plan(request: dict[str, Any], config: PlannerConfig) -> dict[str, Any]:
+def generate_plan(
+    request: dict[str, Any],
+    config: PlannerConfig,
+    progress: ProgressReporter | None = None,
+) -> dict[str, Any]:
     # 这里是总调度器：daily 模式逐天生成，whole 模式整段生成，失败则回退到本地骨架。
     language = config.preferred_language if config.preferred_language != "auto" else str(
         request.get("language", "zh")
     )
     if config.use_llm:
+        if progress:
+            progress.stage("使用本地模型生成", percent=35)
         if config.planner_mode == "daily":
-            plan = _generate_by_day_llm(request, config, language)
+            plan = _generate_by_day_llm(request, config, language, progress=progress)
         else:
-            plan = _generate_by_llm(request, config, language)
+            plan = _generate_by_llm(request, config, language, progress=progress)
         if plan is not None:
             return plan
         boosted_tokens = min(config.max_tokens * 2, 8192)
@@ -127,19 +135,29 @@ def generate_plan(request: dict[str, Any], config: PlannerConfig) -> dict[str, A
             )
             boosted = replace(config, max_tokens=boosted_tokens)
             if config.planner_mode == "daily":
-                plan = _generate_by_day_llm(request, boosted, language)
+                plan = _generate_by_day_llm(request, boosted, language, progress=progress)
             else:
-                plan = _generate_by_llm(request, boosted, language)
+                plan = _generate_by_llm(request, boosted, language, progress=progress)
             if plan is not None:
                 return plan
         print("[warn] LLM generation failed or timed out; fallback to mock planner.", flush=True)
+        if progress:
+            progress.stage("切换到本地骨架生成", percent=40)
+    elif progress:
+        progress.stage("使用本地骨架生成", percent=40)
     return _generate_mock_plan(request, language)
 
 
 def _generate_by_llm(
-    request: dict[str, Any], config: PlannerConfig, language: str
+    request: dict[str, Any],
+    config: PlannerConfig,
+    language: str,
+    progress: ProgressReporter | None = None,
 ) -> dict[str, Any] | None:
-    return generate_with_model(
+    if progress:
+        progress.stage("调用模型生成完整行程", percent=45)
+    started = monotonic()
+    result = generate_with_model(
         system_prompt=f"{SYSTEM_PROMPT}\n\n{_language_hint(language)}",
         user_prompt=build_user_prompt(request),
         config=config,
@@ -147,18 +165,31 @@ def _generate_by_llm(
         max_tokens=config.max_tokens,
         expect_json=True,
     )
+    if progress:
+        elapsed = monotonic() - started
+        if result is None:
+            progress.stage("完整行程模型未返回", percent=55)
+        else:
+            progress.stage(f"完整行程生成完成，用时 {elapsed:.1f}s", percent=55)
+    return result
 
 
 def _generate_by_day_llm(
-    request: dict[str, Any], config: PlannerConfig, language: str
+    request: dict[str, Any],
+    config: PlannerConfig,
+    language: str,
+    progress: ProgressReporter | None = None,
 ) -> dict[str, Any] | None:
     # 先用本地骨架给出总体路线，逐天只让模型负责“填细节”。
     scaffold = _generate_mock_plan(request, language)
     days = scaffold["days"]
     built_days: list[dict[str, Any]] = []
     covered_texts: list[str] = []
+    total_days = len(days)
 
     for idx, day in enumerate(days):
+        if progress:
+            progress.day(idx + 1, total_days, f"生成第{day['day']}天")
         remaining_must_do = _remaining_must_do(
             request.get("must_do", []),
             covered_texts,
@@ -171,7 +202,9 @@ def _generate_by_day_llm(
             previous_day=built_days[-1] if built_days else None,
             target_items=target_items,
         )
-        print(f"[info] Generating day {day['day']} in daily mode...", flush=True)
+        if progress:
+            progress.stage(f"第{day['day']}天：调用模型生成", percent=int(((idx + 1) / total_days) * 100))
+        started = monotonic()
         generated_day = generate_with_model(
             system_prompt=f"{DAY_SYSTEM_PROMPT}\n\n{_language_hint(language)}",
             user_prompt=day_prompt,
@@ -180,6 +213,12 @@ def _generate_by_day_llm(
             max_tokens=min(config.max_tokens, 2200),
             expect_json=True,
         )
+        elapsed = monotonic() - started
+        if progress:
+            if generated_day is None:
+                progress.stage(f"第{day['day']}天：模型未返回，使用骨架", percent=int(((idx + 1) / total_days) * 100))
+            else:
+                progress.stage(f"第{day['day']}天：完成，用时 {elapsed:.1f}s", percent=int(((idx + 1) / total_days) * 100))
         if generated_day is None:
             print(f"[warn] Day {day['day']} generation failed; using scaffold day.", flush=True)
             generated_day = day
@@ -191,6 +230,8 @@ def _generate_by_day_llm(
         "trip_summary": scaffold["trip_summary"],
         "days": built_days,
     }
+    if progress:
+        progress.stage("按天生成完成", percent=75)
     return plan
 
 

@@ -1,0 +1,186 @@
+{
+  "trip_summary": {
+    "origin_city": "天津",
+    "destination": "北京",
+    "start_date": "2026-04-20",
+    "end_date": "2026-04-21",
+    "arrival_mode": "train",
+    "travelers": 2,
+    "transport_mode": "public_transport",
+    "budget_level": "mid",
+    "must_do": [
+      "故宫",
+      "北京烤鸭"
+    ]
+  },
+  "days": [
+    {
+      "day": 1,
+      "date": "2026-04-20",
+      "overnight_city": "北京",
+      "slots": [
+        {
+          "slot_id": 1,
+          "type": "transport",
+          "time_start": "08:00",
+          "time_end": "09:30",
+          "title": "天津站前往北京南站",
+          "location": "天津站",
+          "details": "乘坐G字头高铁前往北京南站，预计耗时约1.5小时。",
+          "estimated_cost_cny": 100,
+          "rationale": "作为抵达日，首要任务是完成从天津到北京的城际交通，选择高铁以平衡速度与舒适度。"
+        },
+        {
+          "slot_id": 2,
+          "type": "transport",
+          "time_start": "09:30",
+          "time_end": "10:00",
+          "title": "前往故宫",
+          "location": "北京南站",
+          "details": "乘坐地铁4号线或公交前往故宫东门，预留约30分钟路程时间。",
+          "estimated_cost_cny": 10,
+          "rationale": "抵达北京后需尽快前往当日核心必去景点故宫，利用上午黄金时段游览。"
+        },
+        {
+          "slot_id": 3,
+          "type": "activity",
+          "time_start": "10:00",
+          "time_end": "13:30",
+          "title": "游览故宫博物院",
+          "location": "故宫博物院",
+          "details": "参观太和殿、中和殿、保和殿及乾清宫等主要宫殿，体验明清皇家建筑与历史。",
+          "estimated_cost_cny": 60,
+          "rationale": "满足当日必须完成的目标，故宫是北京的标志性景点，需预留充足时间深度游览。"
+        },
+        {
+          "slot_id": 4,
+          "type": "meal",
+          "time_start": "13:30",
+          "time_end": "14:30",
+          "title": "午餐：王府井小吃",
+          "location": "王府井大街",
+          "details": "在故宫附近品尝北京特色小吃，如豆汁儿、焦圈或炸酱面。",
+          "estimated_cost_cny": 60,
+          "rationale": "午餐安排在景点附近，方便用餐后直接前往下一站，同时体验地道京味美食。"
+        },
+        {
+          "slot_id": 5,
+          "type": "activity",
+          "time_start": "14:30",
+          "time_end": "17:00",
+          "title": "参观国家博物馆",
+          "location": "国家博物馆",
+          "details": "参观古代中国展厅，欣赏青铜器、瓷器等珍贵文物，了解中华文明历史。",
+          "estimated_cost_cny": 40,
+          "rationale": "故宫之后顺路前往国家博物馆，两者距离较近，适合安排在同一天游览，丰富文化体验。"
+        },
+        {
+          "slot_id": 6,
+          "type": "meal",
+          "time_start": "17:00",
+          "time_end": "18:00",
+          "title": "晚餐：护国寺小吃",
+          "location": "护国寺街",
+          "details": "在护国寺附近享用晚餐，尝试炸酱面、铜锅涮肉等经典菜品。",
+          "estimated_cost_cny": 120,
+          "rationale": "晚餐选择护国寺小吃，该区域是北京传统美食聚集地，适合轻松用餐并感受当地氛围。"
+        },
+        {
+          "slot_id": 7,
+          "type": "hotel",
+          "time_start": "18:00",
+          "time_end": "20:00",
+          "title": "入住北京酒店",
+          "location": "北京",
+          "details": "办理入住手续，寄存行李，稍作休息准备次日行程。",
+          "estimated_cost_cny": 400,
+          "rationale": "作为第一晚住宿，选择舒适型酒店，确保休息质量，为第二天的行程蓄力。"
+        }
+      ]
+    },
+    {
+      "day": 2,
+      "date": "2026-04-21",
+      "overnight_city": "北京",
+      "slots": [
+        {
+          "slot_id": 1,
+          "type": "transport",
+          "time_start": "07:00",
+          "time_end": "07:30",
+          "title": "前往故宫",
+          "location": "北京站",
+          "details": "乘坐地铁或公交前往故宫东门，避开早高峰拥堵。",
+          "estimated_cost_cny": 5,
+          "rationale": "确保准时到达核心景点，为上午游览留出充足时间。"
+        },
+        {
+          "slot_id": 2,
+          "type": "activity",
+          "time_start": "07:30",
+          "time_end": "11:30",
+          "title": "游览故宫",
+          "location": "故宫博物院",
+          "details": "参观太和殿、乾清宫等核心区域，感受明清皇家气派。",
+          "estimated_cost_cny": 60,
+          "rationale": "故宫是必去核心景点，上午光线好，游览体验最佳。"
+        },
+        {
+          "slot_id": 3,
+          "type": "meal",
+          "time_start": "11:30",
+          "time_end": "12:30",
+          "title": "品尝北京烤鸭",
+          "location": "四季民福烤鸭店",
+          "details": "预订座位，享用正宗北京烤鸭配荷叶饼和葱丝。",
+          "estimated_cost_cny": 300,
+          "rationale": "满足当日必做目标，体验地道京味美食。"
+        },
+        {
+          "slot_id": 4,
+          "type": "activity",
+          "time_start": "13:30",
+          "time_end": "16:30",
+          "title": "游览天坛",
+          "location": "天坛公园",
+          "details": "参观祈年殿和圜丘，了解古代祭祀文化。",
+          "estimated_cost_cny": 20,
+          "rationale": "天坛是另一大核心景点，与故宫形成经典组合，适合下午游览。"
+        },
+        {
+          "slot_id": 5,
+          "type": "buffer",
+          "time_start": "16:30",
+          "time_end": "17:30",
+          "title": "休息与调整",
+          "location": "天坛公园附近",
+          "details": "短暂休息，整理行程，准备前往酒店。",
+          "estimated_cost_cny": 0,
+          "rationale": "为后续行程预留缓冲时间，避免时间紧张。"
+        },
+        {
+          "slot_id": 6,
+          "type": "transport",
+          "time_start": "17:30",
+          "time_end": "18:00",
+          "title": "前往酒店",
+          "location": "北京站",
+          "details": "乘坐地铁前往预定酒店区域。",
+          "estimated_cost_cny": 5,
+          "rationale": "确保按时抵达酒店，为晚间休息做准备。"
+        },
+        {
+          "slot_id": 7,
+          "type": "hotel",
+          "time_start": "18:00",
+          "time_end": "23:00",
+          "title": "入住北京酒店",
+          "location": "北京站附近",
+          "details": "办理入住手续，休息放松，结束愉快的一天。",
+          "estimated_cost_cny": 400,
+          "rationale": "作为当日最后一个环节，确保游客得到充分休息。"
+        }
+      ]
+    }
+  ]
+}
