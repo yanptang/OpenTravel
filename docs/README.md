@@ -6,6 +6,7 @@
 
 - [下一阶段开发计划](./next_phase_plan.md)
 - [攻略生成准则](./travel_planning_principles.md)
+- [模型与算力策略](./model_and_compute_strategy.md)
 
 ## 阅读顺序
 
@@ -13,6 +14,6 @@
 
 1. `next_phase_plan.md`
 2. `travel_planning_principles.md`
-3. `LocalAgentCLI/README.md`
-4. `LocalAgentCLI/开发日志.md`
-
+3. `model_and_compute_strategy.md`
+4. `LocalAgentCLI/README.md`
+5. `LocalAgentCLI/开发日志.md`
