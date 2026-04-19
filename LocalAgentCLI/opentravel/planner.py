@@ -271,7 +271,11 @@ def _build_major_stops(
         return result
     return [
         {
-            "zone": _localize_zone(f"{destination} Day {i + 1}", language),
+            "zone": _localize_text(
+                f"{destination} Day {i + 1}",
+                f"{destination}第{i + 1}天",
+                language,
+            ),
             "overnight_city": _localize_city(destination, language),
         }
         for i in range(total_days)
@@ -286,6 +290,7 @@ def _build_day_slots(
     request: dict[str, Any],
     language: str,
 ) -> list[dict[str, Any]]:
+    transport_mode = request.get("transport_mode", "mixed")
     if day_no == 1:
         # 第一天是到达日，必须显式包含“出发 -> 到达 -> 进城/取车”链路。
         slots = _build_arrival_day_slots(request, stop, language)
@@ -306,7 +311,11 @@ def _build_day_slots(
                 language,
             ),
             "estimated_cost_cny": 60,
-            "rationale": _localize_text("Stable start for self-drive day.", "为自驾日提供稳定开局。", language),
+            "rationale": _localize_text(
+                "Stable start for the day.",
+                "为当天行程提供稳定开局。",
+                language,
+            ),
         },
         {
             "slot_id": 2,
@@ -314,18 +323,26 @@ def _build_day_slots(
             "time_start": "09:00",
             "time_end": "11:00",
             "title": _localize_text(
-                f"Drive to {stop['zone']} highlights",
+                (
+                    f"Take public transport to {stop['zone']}"
+                    if transport_mode == "public_transport"
+                    else f"Drive to {stop['zone']} highlights"
+                ),
                 f"前往{stop['zone']}游览",
                 language,
             ),
             "location": stop["zone"],
             "details": _localize_text(
-                "Self-drive scenic transfer. Time is estimated.",
-                "自驾前往下一站，时长为估算值。",
+                "Public transport transfer. Time is estimated.",
+                "乘坐公共交通前往下一站，时长为估算值。",
                 language,
             ),
             "estimated_cost_cny": 120,
-            "rationale": _localize_text("Keep a moderate driving window.", "控制驾驶时长，保持节奏适中。", language),
+            "rationale": _localize_text(
+                "Keep pacing realistic for the day.",
+                "保持当天节奏合理。",
+                language,
+            ),
         },
         {
             "slot_id": 3,
@@ -540,12 +557,12 @@ def _arrival_hub(destination: str, arrival_mode: str) -> str:
     destination_lower = destination.lower()
     if arrival_mode == "flight":
         if "iceland" in destination_lower or "冰岛" in destination:
-            return "Keflavik International Airport"
-        return f"{destination} Airport"
+            return "凯夫拉维克国际机场"
+        return f"{destination}机场"
     if arrival_mode == "train":
-        return f"{destination} Main Station"
+        return f"{destination}火车站"
     if arrival_mode == "ferry":
-        return f"{destination} Ferry Terminal"
+        return f"{destination}码头"
     return destination
 
 

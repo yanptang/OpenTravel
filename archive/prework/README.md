@@ -15,6 +15,12 @@
 - `实施计划.md`：阶段性推进计划
 - `待整理信息.md`：尚未完全归纳的零散信息
 - `开发日志.md`：早期开发记录
+- `我是如何做攻略的.md`：我自己整理攻略的方法论原稿
+
+## 已上升到项目级文档的内容
+
+- [docs/next_phase_plan.md](../../docs/next_phase_plan.md)：下一阶段开发计划
+- [docs/travel_planning_principles.md](../../docs/travel_planning_principles.md)：攻略生成准则
 
 ## 核心结论
 

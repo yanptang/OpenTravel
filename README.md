@@ -13,7 +13,7 @@
 
   <p>
     <a href="./LocalAgentCLI/README.md"><img src="https://img.shields.io/badge/Local%20CLI-使用说明-111827?style=for-the-badge" alt="Local CLI" /></a>
-    <a href="next_phase_plan.md"><img src="https://img.shields.io/badge/Next%20Phase-开发计划-0F766E?style=for-the-badge" alt="Next Phase" /></a>
+    <a href="./docs/next_phase_plan.md"><img src="https://img.shields.io/badge/Next%20Phase-开发计划-0F766E?style=for-the-badge" alt="Next Phase" /></a>
   </p>
 </div>
 
@@ -89,9 +89,11 @@
 主线实现与说明请直接查看：
 
 - [本地 CLI 说明](./LocalAgentCLI/README.md)
+- [项目文档](./docs/README.md)
 - [开发日志](./LocalAgentCLI/开发日志.md)
 - [项目结构说明](./LocalAgentCLI/项目结构说明.md)
-- [下阶段开发计划](./archive/prework/next_phase_plan.md)
+- [下阶段开发计划](./docs/next_phase_plan.md)
+- [攻略生成准则](./docs/travel_planning_principles.md)
 
 ---
 
@@ -114,6 +116,7 @@
 OpenTravel/
   README.md
   LICENSE
+  docs/
   assets/
   archive/
   LocalAgentCLI/
@@ -130,6 +133,10 @@ OpenTravel/
 ### `assets/`
 
 统一存放截图、示意图和其他项目资源文件。
+
+### `docs/`
+
+项目级文档入口，保存下一阶段开发计划、攻略生成准则等全局指导文档。
 
 ---
 
