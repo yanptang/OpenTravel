@@ -1,11 +1,28 @@
-Fix this itinerary JSON according to these validation errors.
-Only modify what is necessary. Keep the day-by-day structure.
+Repair the itinerary JSON below.
+
+Important:
+- The current plan is provided in full so the model can edit the actual JSON.
+- The diagnostic summary is intentionally compact to reduce noise.
+- The focus list below includes the exact sections and focus_slots you should repair.
+- Every focus target must be modified in the final JSON.
+- If any focus target remains unchanged, treat the attempt as failed.
+- Do not return the original content for a focus target.
+- Modify only the affected sections when possible.
+- Keep all unaffected sections unchanged.
+- If you need to rewrite a whole day, only rewrite that day.
+- Preserve all required fields and return valid JSON only.
 
 Request:
 $request_json
 
 Validation errors:
 $errors_json
+
+Plan summary:
+$report_json
+
+Focus targets:
+$focus_json
 
 Current plan:
 $current_plan_json

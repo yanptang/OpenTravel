@@ -1,6 +1,7 @@
 Generate exactly one day JSON for this trip.
 Use the trip payload, the planning history, and the day-specific target items to build a realistic daily schedule.
 Use plain, easy-to-understand titles and keep the details concise and practical.
+For transport slots, always write the origin and destination clearly. Keep hotel check-in to at most one slot on non-final days.
 
 Input payload:
 $payload_json

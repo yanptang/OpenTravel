@@ -17,6 +17,42 @@
   </p>
 </div>
 
+---
+
+## 2026-04-21 当前阶段说明
+
+项目当前已经从“先把 CLI 跑通”进入到“提高攻略质量和修复闭环”的阶段。
+
+现阶段的重点不是继续堆功能，而是把下面这条链路做稳：
+
+`whole 生成 -> validation 诊断 -> refiner 局部重绘 -> 再 validation`
+
+当前判断如下：
+
+- `whole` 是当前主生成模式
+- `daily` 之后仍然会继续优化，但暂时不再承担当前阶段的主质量目标
+- `validation / refiner` 已经开始采用更像 `day + slot` 的局部更新思路
+
+也就是说，当前项目已经不再只是“一次生成一个 plan”，而是开始具备一个可迭代的生成与修复闭环。
+
+---
+
+## 2026-04-21 当前阶段说明
+
+项目当前已经从“先把 CLI 跑通”进入到“提高攻略质量和修复闭环”的阶段。
+
+现阶段的重点不是继续堆功能，而是把下面这条链路做稳：
+
+`whole 生成 -> validation 诊断 -> refiner 局部重绘 -> 再 validation`
+
+当前判断如下：
+
+- `whole` 是当前主生成模式
+- `daily` 之后仍然会继续优化，但暂时不再承担当前阶段的主质量目标
+- `validation / refiner` 已经开始采用更像 `day + slot` 的局部更新思路
+
+也就是说，当前项目已经不再只是“一次生成一个 plan”，而是开始具备一个可迭代的生成与修复闭环。
+
 当前仓库保留两条主线：
 
 - `LocalAgentCLI/`：当前可运行的本地原型
@@ -252,3 +288,21 @@ python main.py --input sample_request.json --planner-mode daily
     <img src="https://img.shields.io/github/repo-size/yanptang/OpenTravel?style=for-the-badge" alt="Repo Size" />
   </p>
 </div>
+
+---
+
+## 2026-04-21 当前阶段说明
+
+项目当前已经从“先把 CLI 跑通”进入到“提高攻略质量和修复闭环”的阶段。
+
+现阶段的重点不是继续堆功能，而是把下面这条链路做稳：
+
+`whole 生成 -> validation 诊断 -> refiner 局部重绘 -> 再 validation`
+
+当前判断如下：
+
+- `whole` 是当前主生成模式
+- `daily` 之后仍然会继续优化，但暂时不再承担当前阶段的主质量目标
+- `validation / refiner` 已经开始采用更像 `day + slot` 的局部更新思路
+
+也就是说，当前项目已经不再只是“一次生成一个 plan”，而是开始具备一个可迭代的生成与修复闭环。

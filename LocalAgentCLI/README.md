@@ -289,3 +289,42 @@ python main.py --input tianjin_beijing_request.json --no-clarify --planner-mode 
 | `python main.py --input sample_request.json --planner-mode daily --edit` | 人工微调结果 | 适合生成后再手动删改 slot，看看交互编辑链路是否可用。 |
 | `python main.py --input tianjin_beijing_request.json --no-llm --no-clarify --render-format markdown` | 不依赖模型时的快速验证 | 直接走本地骨架，方便检查输出格式、落盘和渲染。 |
 | `python main.py --input tianjin_beijing_request.json --no-clarify --planner-mode daily --artifact-dir outputs/runs/tianjin-beijing-2day` | 固定保存一版样例 | 适合做回归样例，避免覆盖 `outputs/latest/`。 |
+
+## 当前阶段建议
+
+截至 2026-04-21，当前更推荐的使用方式已经有了阶段性调整：
+
+- 生成主线优先使用 `whole`
+- `daily` 仍然保留，后面还会继续做，但当前不再是首版质量优化的第一优先级
+- 校验失败后，系统已经不再依赖整份重写，而是优先走“按天 / 按问题”的局部重绘修复
+
+也就是说，当前更贴近真实使用的闭环是：
+
+`whole 生成 -> validation 诊断 -> refiner 局部重绘 -> 再 validation`
+
+## 自动修复机制说明
+
+当前自动修复已经从早期的“整份 refine”调整成更聚焦的局部修复：
+
+- `validation` 负责发现问题、定位问题、识别问题类型
+- `refiner` 只重绘有问题的 `day / slot`
+- 没问题的天不会送给模型，避免误改已经满意的内容
+
+这一点对本地模型尤其重要，因为：
+
+- 整份 plan 一起修时，小模型容易原样返回
+- 局部问题单独修时，模型更容易真正动手改
+
+## 当前推荐命令
+
+如果你现在想跑一版更接近当前主线的完整流程，优先建议：
+
+```bash
+python main.py --input sample_request.json --planner-mode whole
+```
+
+如果你想观察校验和修复链路是否生效，可以继续配合：
+
+```bash
+python main.py --input sample_request.json --planner-mode whole --artifact-dir outputs/runs/sample-whole
+```

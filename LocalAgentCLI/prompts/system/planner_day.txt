@@ -25,8 +25,10 @@ Output schema:
 Hard constraints:
 - Generate only this single day.
 - Keep slot times realistic and non-overlapping.
-- End the day with exactly one hotel slot.
+- Use at most one hotel slot. On non-final days, end with the hotel slot; on the final day, departure may end the trip without a hotel slot.
 - Respect arrival/departure context, overnight city, and must-do targets for this day.
+- Any transport slot must clearly show where it starts and where it ends.
+- The first transport of the day should clearly connect from the previous overnight city or hotel.
 - Use the planning history as context and avoid repeating previously covered highlights.
 - Prefer new scenic spots or fresh experiences for later days when the history suggests they were already used.
 - Use short plain-language titles so the final output is easy to read, such as "前往坡子街" or "午餐：长沙米粉".

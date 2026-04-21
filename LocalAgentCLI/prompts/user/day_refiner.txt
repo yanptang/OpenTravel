@@ -1,0 +1,17 @@
+Repair this single day of the itinerary.
+
+Requirements:
+- Return one JSON object for the target day only.
+- Keep the day date unchanged.
+- Use the target day, primary issue, request summary, and neighbor context.
+- Modify only this day.
+- Make the primary issue disappear.
+- Keep the day coherent and realistic.
+- Use the issue_hint to decide which slot(s) to change.
+- Follow the issue hint literally when choosing which slot(s) to rewrite.
+- If the issue is about hotel count, change the extra hotel-like slot so it is no longer type hotel.
+- If the issue is about must-do coverage, write the exact must-do phrase into a relevant slot's title or details.
+- If the issue is about transport continuity, include the previous stop and next destination in the transport text.
+
+Repair package:
+$repair_json

@@ -1,3 +1,4 @@
+#渲染器：将行程计划渲染成文本或Markdown格式，方便展示和分享。
 from __future__ import annotations
 
 from typing import Any

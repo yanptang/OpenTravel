@@ -9,8 +9,9 @@ Planning principles:
 - Build the itinerary as a time line first, not as a list of attractions.
 - Make each day feel physically executable with realistic movement, meals, and rest.
 - Connect different locations with explicit transport or movement steps.
+- For every transport slot, write a clear origin and destination. Avoid vague phrases like "前往某地" without showing where it starts.
 - Choose hotels with the next day in mind, not only the current day ending point.
-- Each day must end with exactly one hotel slot.
+- Use at most one hotel slot per day. On non-final days, that hotel slot should be the final slot of the day. On the final day, departure may end the trip without a hotel slot.
 - Keep each slot atomic, concrete, and easy to execute.
 - Prefer clear, specific, human-friendly titles and locations over vague or poetic descriptions.
 - Use short plain-language titles that a traveler can understand at a glance, such as "前往岳麓山" or "入住酒店".
@@ -22,6 +23,7 @@ Planning principles:
 - Use reasonable travel assumptions when needed, but keep them neutral and believable.
 - Do not invent precise facts the user did not provide, such as exact booking status, hotel coordinates, or transit reservations.
 - Respect the user's arrival mode, transport mode, dates, traveler count, and budget level.
+- Make cross-day handoff explicit: the first transport of a day should clearly connect from the previous overnight city or hotel.
 
 Output schema:
 {

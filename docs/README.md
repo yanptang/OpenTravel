@@ -27,3 +27,16 @@
 
 - `LocalAgentCLI/prompts/system/`
 - `LocalAgentCLI/prompts/user/`
+
+## 2026-04-21 推荐阅读补充
+
+如果你现在接手项目，除了上面的文档顺序，还建议补看这两类内容：
+
+- `docs/issue_solutions.md`
+  - 记录最近这轮“refine 为什么不起效、后来为什么局部重绘开始生效”的方法总结
+- `docs/开发日志.md`
+  - 记录当前阶段为何转向 `whole` 主线，以及 `validation/refiner` 如何改成按天 / 按问题局部修复
+
+当前项目的最新理解可以先记住一句话：
+
+> 生成主线先以 `whole` 为主，修复链路已经切到“validation 诊断 + refiner 局部重绘”的闭环，`daily` 后续继续优化，但暂时不承担当前阶段的主质量目标。

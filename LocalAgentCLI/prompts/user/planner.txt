@@ -6,6 +6,8 @@ Use the trip notes and special requirements as constraints, not as optional sugg
 Plan the full trip so it reads like one coherent route with good pacing and natural transitions.
 Cover must_do items once each across the trip unless the request explicitly asks to repeat them.
 Write titles and details in plain, easy-to-read travel language. Avoid abbreviations and overly fancy wording.
+Keep the hotel logic simple: each non-final day should have only one check-in slot at the end of the day, while the final day may end with departure instead of hotel.
+Make every transport slot explicit about where it starts and where it ends.
 
 Request JSON:
 $request_json
