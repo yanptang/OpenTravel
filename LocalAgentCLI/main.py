@@ -50,7 +50,7 @@ def main() -> int:
     detected_language = detect_language(request)
     request["language"] = detected_language
     progress = ProgressReporter(enabled=(not args.no_progress), language=detected_language)
-    progress.stage("已读取需求文件，开始初始化", percent=5)
+    progress.stage("已读取需求文件，开始初始化", percent=1)
 
     config = PlannerConfig(
         use_llm=(not args.no_llm),
@@ -64,14 +64,14 @@ def main() -> int:
     )
 
     if not args.no_clarify:
-        progress.stage("进入多轮澄清", percent=10)
+        progress.stage("进入多轮澄清", percent=2)
         request = clarify_request(request, config=config, progress=progress)
         detected_language = detect_language(request)
         request["language"] = detected_language
         config.preferred_language = detected_language
         progress.language = detected_language
 
-    progress.stage("校验输入需求", percent=20)
+    progress.stage("校验输入需求", percent=3)
     req_result = validate_request(request)
     if not req_result.valid:
         print("Input validation failed:")
@@ -82,7 +82,7 @@ def main() -> int:
     artifact_dir = _resolve_artifact_dir(base_dir, args.artifact_dir)
     artifact_dir.mkdir(parents=True, exist_ok=True)
 
-    progress.stage("保存输入快照", percent=25)
+    progress.stage("保存输入快照", percent=4)
     request_snapshot = artifact_dir / "request.json"
     request_snapshot.write_text(
         json.dumps(request, ensure_ascii=False, indent=2),
@@ -90,9 +90,9 @@ def main() -> int:
     )
     print(f"Saved request snapshot to: {request_snapshot}")
 
-    progress.stage("开始生成行程", percent=30)
+    progress.stage("开始生成行程", percent=5)
     plan = generate_plan(request, config, progress=progress)
-    progress.stage("开始校验行程", percent=85)
+    progress.stage("开始校验行程", percent=75)
     validation = validate_plan(plan)
     retries = 0
 
@@ -113,7 +113,7 @@ def main() -> int:
         print("Plan validation passed.")
 
     if args.edit:
-        progress.stage("进入手动编辑", percent=90)
+        progress.stage("进入手动编辑", percent=85)
         plan = edit_plan_interactively(plan)
         validation = validate_plan(plan)
         print("Post-edit validation:", "PASS" if validation.valid else "FAIL")

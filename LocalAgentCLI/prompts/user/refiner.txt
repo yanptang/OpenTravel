@@ -1,0 +1,11 @@
+Fix this itinerary JSON according to these validation errors.
+Only modify what is necessary. Keep the day-by-day structure.
+
+Request:
+$request_json
+
+Validation errors:
+$errors_json
+
+Current plan:
+$current_plan_json

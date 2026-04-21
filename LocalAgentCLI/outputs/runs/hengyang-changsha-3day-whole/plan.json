@@ -1,0 +1,216 @@
+{
+  "trip_summary": {
+    "origin_city": "衡阳",
+    "destination": "长沙",
+    "start_date": "2026-05-08",
+    "end_date": "2026-05-10",
+    "arrival_mode": "train",
+    "travelers": 2,
+    "transport_mode": "public_transport",
+    "budget_level": "mid",
+    "must_do": [
+      "岳麓山",
+      "橘子洲",
+      "坡子街美食"
+    ]
+  },
+  "days": [
+    {
+      "day": 1,
+      "date": "2026-05-08",
+      "overnight_city": "长沙",
+      "slots": [
+        {
+          "slot_id": 1,
+          "type": "transport",
+          "time_start": "08:00",
+          "time_end": "09:30",
+          "title": "衡阳前往长沙高铁",
+          "location": "衡阳站",
+          "details": "乘坐G字头高铁前往长沙南站，预计耗时约1.5小时，二等座票价约100元/人。",
+          "estimated_cost_cny": 200,
+          "rationale": "上午出发，确保下午有充足时间游览核心景点。"
+        },
+        {
+          "slot_id": 2,
+          "type": "activity",
+          "time_start": "10:00",
+          "time_end": "12:00",
+          "title": "岳麓山游览",
+          "location": "岳麓山",
+          "details": "乘坐地铁2号线至麓山门，步行或乘坐观光车登顶，参观爱晚亭、岳麓书院，俯瞰岳麓山全景。",
+          "estimated_cost_cny": 80,
+          "rationale": "必做景点，上午光线好，适合登高望远。"
+        },
+        {
+          "slot_id": 3,
+          "type": "meal",
+          "time_start": "12:00",
+          "time_end": "13:30",
+          "title": "午餐：长沙特色小吃",
+          "location": "坡子街附近",
+          "details": "在坡子街品尝臭豆腐、糖油粑粑、口味虾等本地美食，感受市井烟火气。",
+          "estimated_cost_cny": 120,
+          "rationale": "满足必做美食需求，坡子街是长沙美食聚集地。"
+        },
+        {
+          "slot_id": 4,
+          "type": "transport",
+          "time_start": "14:00",
+          "time_end": "15:00",
+          "title": "前往橘子洲头",
+          "location": "坡子街",
+          "details": "乘坐地铁1号线或公交前往橘子洲头，约20分钟车程。",
+          "estimated_cost_cny": 10,
+          "rationale": "交通衔接，前往下一个必做景点。"
+        },
+        {
+          "slot_id": 5,
+          "type": "activity",
+          "time_start": "15:00",
+          "time_end": "17:30",
+          "title": "橘子洲头游览",
+          "location": "橘子洲",
+          "details": "乘坐观光车至主岛，参观毛泽东青年艺术雕塑，漫步洲头，拍摄标志性照片。",
+          "estimated_cost_cny": 60,
+          "rationale": "必做景点，下午游览可避开部分人流。"
+        },
+        {
+          "slot_id": 6,
+          "type": "meal",
+          "time_start": "17:30",
+          "time_end": "18:30",
+          "title": "晚餐：湘江边简餐",
+          "location": "橘子洲附近",
+          "details": "在湘江边选择一家餐馆享用晚餐，欣赏夜景，品尝剁椒鱼头。",
+          "estimated_cost_cny": 150,
+          "rationale": "轻松用餐，为次日行程蓄力。"
+        },
+        {
+          "slot_id": 7,
+          "type": "hotel",
+          "time_start": "18:30",
+          "time_end": "20:00",
+          "title": "入住长沙市中心酒店",
+          "location": "五一广场附近",
+          "details": "预订五一广场附近的酒店，交通便利，方便第二天前往坡子街。",
+          "estimated_cost_cny": 300,
+          "rationale": "住宿安排，位置优越，便于次日出行。"
+        }
+      ]
+    },
+    {
+      "day": 2,
+      "date": "2026-05-09",
+      "overnight_city": "长沙",
+      "slots": [
+        {
+          "slot_id": 1,
+          "type": "activity",
+          "time_start": "09:00",
+          "time_end": "11:00",
+          "title": "湖南省博物馆",
+          "location": "湖南省博物馆",
+          "details": "提前预约门票，参观马王堆汉墓出土文物，了解长沙历史文明。",
+          "estimated_cost_cny": 40,
+          "rationale": "上午游览，避开人流高峰，深度体验历史文化。"
+        },
+        {
+          "slot_id": 2,
+          "type": "meal",
+          "time_start": "11:30",
+          "time_end": "12:30",
+          "title": "午餐：茶颜悦色及小吃",
+          "location": "湖南省博物馆附近",
+          "details": "品尝长沙特色奶茶茶颜悦色，搭配小吃解腻。",
+          "estimated_cost_cny": 60,
+          "rationale": "简单午餐，补充能量。"
+        },
+        {
+          "slot_id": 3,
+          "type": "transport",
+          "time_start": "13:00",
+          "time_end": "14:00",
+          "title": "前往坡子街",
+          "location": "湖南省博物馆",
+          "details": "乘坐地铁2号线或步行前往坡子街，约15分钟。",
+          "estimated_cost_cny": 5,
+          "rationale": "交通衔接，前往美食街。"
+        },
+        {
+          "slot_id": 4,
+          "type": "activity",
+          "time_start": "14:00",
+          "time_end": "17:00",
+          "title": "坡子街漫步与购物",
+          "location": "坡子街",
+          "details": "在坡子街闲逛，购买文创产品，品尝更多地道小吃，感受长沙夜生活氛围。",
+          "estimated_cost_cny": 100,
+          "rationale": "休闲活动，满足必做美食与购物需求。"
+        },
+        {
+          "slot_id": 5,
+          "type": "meal",
+          "time_start": "17:00",
+          "time_end": "18:00",
+          "title": "晚餐：坡子街特色菜",
+          "location": "坡子街",
+          "details": "在坡子街选择一家餐馆享用晚餐，品尝长沙特色菜。",
+          "estimated_cost_cny": 150,
+          "rationale": "满足必做美食需求，享受美食。"
+        },
+        {
+          "slot_id": 6,
+          "type": "hotel",
+          "time_start": "18:00",
+          "time_end": "20:00",
+          "title": "入住长沙市中心酒店",
+          "location": "五一广场附近",
+          "details": "继续入住同一酒店，方便次日出行。",
+          "estimated_cost_cny": 300,
+          "rationale": "住宿安排，位置优越，便于次日出行。"
+        }
+      ]
+    },
+    {
+      "day": 3,
+      "date": "2026-05-10",
+      "overnight_city": "长沙",
+      "slots": [
+        {
+          "slot_id": 1,
+          "type": "transport",
+          "time_start": "08:00",
+          "time_end": "09:00",
+          "title": "前往长沙南站",
+          "location": "五一广场",
+          "details": "乘坐地铁1号线前往长沙南站，预留充足时间。",
+          "estimated_cost_cny": 5,
+          "rationale": "交通衔接，前往火车站。"
+        },
+        {
+          "slot_id": 2,
+          "type": "transport",
+          "time_start": "09:00",
+          "time_end": "10:30",
+          "title": "长沙返回衡阳高铁",
+          "location": "长沙南站",
+          "details": "乘坐G字头高铁返回衡阳，预计耗时约1.5小时。",
+          "estimated_cost_cny": 200,
+          "rationale": "返程交通，结束旅程。"
+        },
+        {
+          "slot_id": 3,
+          "type": "buffer",
+          "time_start": "10:30",
+          "time_end": "12:00",
+          "title": "行程缓冲与自由活动",
+          "location": "衡阳站",
+          "details": "抵达衡阳后，预留时间处理行李，稍作休息，结束愉快旅程。",
+          "estimated_cost_cny": 0,
+          "rationale": "行程缓冲，确保行程顺利结束。"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "origin_city": "衡阳",
+  "destination": "长沙",
+  "start_date": "2026-05-08",
+  "end_date": "2026-05-10",
+  "arrival_mode": "train",
+  "travelers": 2,
+  "transport_mode": "public_transport",
+  "must_do": [
+    "岳麓山",
+    "橘子洲",
+    "坡子街美食"
+  ],
+  "budget_level": "mid",
+  "notes": "衡阳到长沙的3日短途游，节奏不要太赶，优先城市核心景点和本地美食。",
+  "special_requirements": "尽量安排公共交通衔接清晰，住宿方便第二天继续游览。",
+  "language": "zh"
+}

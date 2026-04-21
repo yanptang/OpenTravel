@@ -50,6 +50,7 @@ OpenTravel 本地 CLI 版本用于验证“旅行需求输入 -> 多轮澄清 ->
 
 - `main.py`：命令行入口，负责读取输入、执行校验、生成计划、导出结果。
 - `opentravel/`：核心业务模块，包含澄清、模型调用、验证、渲染和交互编辑。
+- `prompts/`：外置 prompt 模板目录，分为 `system/` 和 `user/` 两层，存放 planner / clarifier / refiner 的提示词。
 - `sample_request.json`：通用示例输入文件。
 - `tianjin_beijing_request.json`：中文示例输入文件，用于测试两日游场景。
 - `outputs/`：默认输出目录，存放生成结果。
@@ -229,3 +230,62 @@ python main.py --input tianjin_beijing_request.json --no-clarify --planner-mode 
 3. 增加用户偏好记忆
 4. 增加更细的 `slot` 重排能力
 5. 如果未来接实时工具，再加入航班、酒店和地图查询
+
+## 参数速查
+
+下面按 5 个类别整理 CLI 参数，并列出默认值，方便你在终端里快速判断该怎么组合。
+
+### 1. 输入输出类
+
+| 参数 | 默认值 | 含义 |
+| --- | --- | --- |
+| `--input` | `sample_request.json` | 输入请求文件路径。 |
+| `--output` | 空 | 最终 `plan.json` 输出路径。为空时写到 `artifact-dir/plan.json`。 |
+| `--render-output` | 空 | 人类可读攻略输出路径。为空时按格式写到 `artifact-dir/plan.md` 或 `plan.txt`。 |
+| `--artifact-dir` | 空 | 一次运行的整体产物目录，会统一保存 `request.json`、`plan.json`、`plan.md`。 |
+| `--render-format` | `markdown` | 攻略输出格式，支持 `markdown` 或 `text`。 |
+
+### 2. 模型与运行时类
+
+| 参数 | 默认值 | 含义 |
+| --- | --- | --- |
+| `--no-llm` | `false` | 不调用模型，直接使用本地骨架生成。 |
+| `--model` | `ollama/qwen3.5:4b` | 使用的模型名称。 |
+| `--api-base` | `http://localhost:11434` | Ollama 接口地址。 |
+| `--max-tokens` | `4096` | 模型输出上限。 |
+| `--timeout-sec` | `900` | 模型请求超时时间，单位秒。 |
+| `--refine-retries` | `2` | 行程校验失败后的修正重试次数。 |
+
+### 3. 规划方式类
+
+| 参数 | 默认值 | 含义 |
+| --- | --- | --- |
+| `--planner-mode` | `daily` | 规划模式。`daily` 是先搭骨架再逐天细化，`whole` 是一次性生成整段。 |
+
+### 4. 交互与校验控制类
+
+| 参数 | 默认值 | 含义 |
+| --- | --- | --- |
+| `--no-clarify` | `false` | 跳过多轮澄清，直接进入生成流程。 |
+| `--no-progress` | `false` | 关闭进度提示。 |
+| `--edit` | `false` | 生成后进入终端手动编辑。 |
+
+### 5. 输出与落盘类
+
+| 项目 | 默认值 | 含义 |
+| --- | --- | --- |
+| `request.json` | 自动生成 | 本次运行的输入快照。 |
+| `plan.json` | 自动生成 | 结构化行程结果。 |
+| `plan.md` / `plan.txt` | 自动生成 | 给人直接阅读的攻略输出。 |
+| `outputs/latest/` | 默认目录 | 最新一次运行的输出目录。 |
+| `outputs/final/` | 手动指定 | 比较稳定、值得保留的正式结果。 |
+
+### 常用组合
+
+| 组合 | 适用场景 | 说明 |
+| --- | --- | --- |
+| `python main.py --input sample_request.json --planner-mode daily` | 正常跑一遍本地生成 | 适合先看完整流程是否通。默认会做澄清、生成、校验和导出。 |
+| `python main.py --input sample_request.json --planner-mode daily --no-clarify` | 自动化测试 / 批量验证 | 跳过澄清后更稳定，也更适合脚本化跑例子。 |
+| `python main.py --input sample_request.json --planner-mode daily --edit` | 人工微调结果 | 适合生成后再手动删改 slot，看看交互编辑链路是否可用。 |
+| `python main.py --input tianjin_beijing_request.json --no-llm --no-clarify --render-format markdown` | 不依赖模型时的快速验证 | 直接走本地骨架，方便检查输出格式、落盘和渲染。 |
+| `python main.py --input tianjin_beijing_request.json --no-clarify --planner-mode daily --artifact-dir outputs/runs/tianjin-beijing-2day` | 固定保存一版样例 | 适合做回归样例，避免覆盖 `outputs/latest/`。 |

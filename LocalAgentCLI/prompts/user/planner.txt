@@ -1,0 +1,11 @@
+$language_hint
+
+Generate one complete itinerary JSON for the entire trip.
+Treat the request JSON as the source of truth for dates, cities, trip size, and preferences.
+Use the trip notes and special requirements as constraints, not as optional suggestions.
+Plan the full trip so it reads like one coherent route with good pacing and natural transitions.
+Cover must_do items once each across the trip unless the request explicitly asks to repeat them.
+Write titles and details in plain, easy-to-read travel language. Avoid abbreviations and overly fancy wording.
+
+Request JSON:
+$request_json

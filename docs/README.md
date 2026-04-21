@@ -7,6 +7,8 @@
 - [下一阶段开发计划](./next_phase_plan.md)
 - [攻略生成准则](./travel_planning_principles.md)
 - [模型与算力策略](./model_and_compute_strategy.md)
+- [项目运行流程](./项目运行流程.md)
+- [项目结构说明](./项目结构说明.md)
 
 ## 阅读顺序
 
@@ -15,5 +17,13 @@
 1. `next_phase_plan.md`
 2. `travel_planning_principles.md`
 3. `model_and_compute_strategy.md`
-4. `LocalAgentCLI/README.md`
-5. `LocalAgentCLI/开发日志.md`
+4. `项目运行流程.md`
+5. `项目结构说明.md`
+6. `LocalAgentCLI/README.md`
+7. `LocalAgentCLI/开发日志.md`
+## LocalAgentCLI prompt 模板目录
+
+如果你要修改模型提示词，优先看：
+
+- `LocalAgentCLI/prompts/system/`
+- `LocalAgentCLI/prompts/user/`

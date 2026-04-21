@@ -5,6 +5,7 @@ from typing import Any
 
 from .llm_client import generate_with_model
 from .models import PlannerConfig
+from .prompt_loader import render_prompt
 
 
 def refine_plan(
@@ -16,16 +17,12 @@ def refine_plan(
     if not config.use_llm:
         return None
 
-    system_prompt = (
-        "You are a strict JSON travel itinerary fixer. "
-        "Return only valid JSON and preserve user intent."
-    )
-    user_prompt = (
-        "Fix this itinerary JSON according to these validation errors.\n"
-        "Only modify what is necessary. Keep day-by-day structure.\n"
-        f"Request:\n{json.dumps(request, ensure_ascii=False, indent=2)}\n\n"
-        f"Validation errors:\n{json.dumps(errors, ensure_ascii=False, indent=2)}\n\n"
-        f"Current plan:\n{json.dumps(current_plan, ensure_ascii=False, indent=2)}\n"
+    system_prompt = render_prompt("system/refiner.txt")
+    user_prompt = render_prompt(
+        "user/refiner.txt",
+        request_json=json.dumps(request, ensure_ascii=False, indent=2),
+        errors_json=json.dumps(errors, ensure_ascii=False, indent=2),
+        current_plan_json=json.dumps(current_plan, ensure_ascii=False, indent=2),
     )
 
     return generate_with_model(

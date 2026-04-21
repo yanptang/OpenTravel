@@ -7,6 +7,7 @@ from typing import Any
 from .llm_client import generate_with_model
 from .models import PlannerConfig
 from .progress import ProgressReporter
+from .prompt_loader import render_prompt
 
 
 def clarify_request(
@@ -357,7 +358,7 @@ def _generate_destination_activity_candidates(
 
     prompt = _build_activity_prompt(request)
     result = generate_with_model(
-        system_prompt=_ACTIVITY_CANDIDATE_SYSTEM_PROMPT,
+        system_prompt=render_prompt("system/clarifier_activity.txt"),
         user_prompt=prompt,
         config=config,
         temperature=0.3,
@@ -390,18 +391,10 @@ def _build_activity_prompt(request: dict[str, Any]) -> str:
         "must_do": request.get("must_do", []),
         "notes": request.get("notes", ""),
     }
-    language = str(request.get("language", "zh"))
-    if language == "en":
-        instruction = (
-            "List local activity candidates that fit the destination and trip context. "
-            "These will be used for follow-up preference questions. Output JSON only.\n"
-        )
-    else:
-        instruction = (
-            "请根据目的地和行程信息，列出适合这个目的地的本地特色活动候选，"
-            "用于后续向用户追问偏好。只输出 JSON。\n"
-        )
-    return instruction + f"{json.dumps(payload, ensure_ascii=False, indent=2)}"
+    return render_prompt(
+        "user/clarifier_activity.txt",
+        payload_json=json.dumps(payload, ensure_ascii=False, indent=2),
+    )
 
 
 def _resolve_language(request: dict[str, Any], config: PlannerConfig | None) -> str:
@@ -497,31 +490,6 @@ def _message(key: str, language: str) -> str:
     }
     en, zh = mapping.get(key, (key, key))
     return en if language == "en" else zh
-
-
-_ACTIVITY_CANDIDATE_SYSTEM_PROMPT = """
-You are a destination-aware travel concierge.
-Return ONLY valid JSON. No markdown. No explanation.
-
-Task:
-Generate 6 to 8 local activity candidates that are actually relevant to the destination and the travel context.
-These candidates will be shown to the user as follow-up preference options.
-
-Output schema:
-{
-  "activities": [
-    "string"
-  ]
-}
-
-Rules:
-- Prefer specific, local, and practical activities.
-- Keep labels short and user-friendly.
-- Avoid duplicates and overly generic items.
-- The list should fit the destination and season.
-"""
-
-
 def _split_items(raw: str | None) -> list[str]:
     if not raw:
         return []

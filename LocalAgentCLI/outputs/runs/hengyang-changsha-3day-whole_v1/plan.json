@@ -1,0 +1,238 @@
+{
+  "trip_summary": {
+    "origin_city": "衡阳",
+    "destination": "长沙",
+    "start_date": "2026-05-08",
+    "end_date": "2026-05-10",
+    "arrival_mode": "train",
+    "travelers": 2,
+    "transport_mode": "public_transport",
+    "budget_level": "mid",
+    "must_do": [
+      "岳麓山",
+      "橘子洲",
+      "坡子街美食"
+    ]
+  },
+  "days": [
+    {
+      "day": 1,
+      "date": "2026-05-08",
+      "overnight_city": "长沙",
+      "slots": [
+        {
+          "slot_id": 1,
+          "type": "transport",
+          "time_start": "08:00",
+          "time_end": "10:30",
+          "title": "衡阳乘火车抵达长沙",
+          "location": "衡阳站 -> 长沙站",
+          "details": "乘坐G字头高铁，预计耗时约2.5小时，抵达长沙站。",
+          "estimated_cost_cny": 128,
+          "rationale": "根据出发时间预留充足行程，确保上午抵达以便开始城市游览。"
+        },
+        {
+          "slot_id": 2,
+          "type": "transport",
+          "time_start": "10:30",
+          "time_end": "11:00",
+          "title": "前往五一广场附近",
+          "location": "长沙站 -> 五一广场",
+          "details": "乘坐地铁2号线或公交，前往五一广场区域，作为长沙核心游览起点。",
+          "estimated_cost_cny": 2,
+          "rationale": "五一广场是长沙地标，周边景点集中，便于第一天安排核心活动。"
+        },
+        {
+          "slot_id": 3,
+          "type": "activity",
+          "time_start": "11:00",
+          "time_end": "13:00",
+          "title": "游览IFS国金中心与黄兴路步行街",
+          "location": "五一广场",
+          "details": "打卡IFS大楼，漫步黄兴路步行街，感受长沙城市氛围。",
+          "estimated_cost_cny": 0,
+          "rationale": "利用上午时间游览市中心地标，为下午前往岳麓山做准备。"
+        },
+        {
+          "slot_id": 4,
+          "type": "meal",
+          "time_start": "12:30",
+          "time_end": "13:30",
+          "title": "午餐：长沙米粉",
+          "location": "黄兴路步行街附近",
+          "details": "品尝长沙特色口味辣米粉，体验地道早餐文化。",
+          "estimated_cost_cny": 35,
+          "rationale": "午餐安排在市中心，方便边走边吃，控制预算。"
+        },
+        {
+          "slot_id": 5,
+          "type": "transport",
+          "time_start": "14:00",
+          "time_end": "14:30",
+          "title": "前往岳麓山",
+          "location": "五一广场 -> 岳麓山南门",
+          "details": "乘坐地铁1号线至麓山门站，或步行约20分钟。",
+          "estimated_cost_cny": 3,
+          "rationale": "岳麓山是必去景点，需提前规划交通，预留登山时间。"
+        },
+        {
+          "slot_id": 6,
+          "type": "activity",
+          "time_start": "14:30",
+          "time_end": "17:30",
+          "title": "游览岳麓山",
+          "location": "岳麓山",
+          "details": "登顶爱晚亭，参观岳麓书院，俯瞰岳麓山全景。",
+          "estimated_cost_cny": 20,
+          "rationale": "岳麓山游览需半天时间，确保体力充足，避开傍晚人流高峰。"
+        },
+        {
+          "slot_id": 7,
+          "type": "meal",
+          "time_start": "17:30",
+          "time_end": "18:30",
+          "title": "晚餐：茶颜悦色与湘菜",
+          "location": "岳麓山附近",
+          "details": "下山后在附近餐厅用餐，品尝湘菜或购买茶颜悦色饮品。",
+          "estimated_cost_cny": 60,
+          "rationale": "晚餐安排在下山后，避免爬山后空腹，同时享受本地美食。"
+        },
+        {
+          "slot_id": 8,
+          "type": "hotel",
+          "time_start": "18:30",
+          "time_end": "20:00",
+          "title": "入住五一广场附近酒店",
+          "location": "五一广场",
+          "details": "预订五一广场附近中档酒店，方便第二天前往橘子洲。",
+          "estimated_cost_cny": 300,
+          "rationale": "五一广场位置优越，交通便利，适合第二天前往橘子洲。"
+        }
+      ]
+    },
+    {
+      "day": 2,
+      "date": "2026-05-09",
+      "overnight_city": "长沙",
+      "slots": [
+        {
+          "slot_id": 1,
+          "type": "transport",
+          "time_start": "08:00",
+          "time_end": "08:30",
+          "title": "前往橘子洲头",
+          "location": "五一广场 -> 橘子洲头",
+          "details": "乘坐地铁2号线至橘子洲站，或乘坐公交。",
+          "estimated_cost_cny": 3,
+          "rationale": "橘子洲是必去景点，需预留充足交通时间。"
+        },
+        {
+          "slot_id": 2,
+          "type": "activity",
+          "time_start": "08:30",
+          "time_end": "11:30",
+          "title": "游览橘子洲",
+          "location": "橘子洲头",
+          "details": "漫步洲头，参观毛泽东青年雕像，拍摄湘江风光。",
+          "estimated_cost_cny": 30,
+          "rationale": "橘子洲游览需半天时间，确保体力充足，避开人流高峰。"
+        },
+        {
+          "slot_id": 3,
+          "type": "meal",
+          "time_start": "11:30",
+          "time_end": "12:30",
+          "title": "午餐：长沙特色小吃",
+          "location": "橘子洲附近",
+          "details": "品尝长沙特色小吃，如臭豆腐、口味虾、糖油粑粑等。",
+          "estimated_cost_cny": 50,
+          "rationale": "午餐安排在橘子洲附近，方便继续品尝美食。"
+        },
+        {
+          "slot_id": 4,
+          "type": "transport",
+          "time_start": "13:00",
+          "time_end": "13:30",
+          "title": "前往坡子街",
+          "location": "橘子洲 -> 坡子街",
+          "details": "乘坐地铁2号线至坡子街站，或乘坐公交。",
+          "estimated_cost_cny": 3,
+          "rationale": "坡子街是必去美食地，需预留充足交通时间。"
+        },
+        {
+          "slot_id": 5,
+          "type": "activity",
+          "time_start": "13:30",
+          "time_end": "16:00",
+          "title": "坡子街美食探索",
+          "location": "坡子街",
+          "details": "品尝长沙特色小吃，如臭豆腐、口味虾、糖油粑粑等。",
+          "estimated_cost_cny": 100,
+          "rationale": "坡子街是必去美食地，需预留充足时间品尝多种小吃。"
+        },
+        {
+          "slot_id": 6,
+          "type": "meal",
+          "time_start": "16:00",
+          "time_end": "17:00",
+          "title": "晚餐：长沙特色湘菜",
+          "location": "坡子街附近",
+          "details": "在坡子街附近餐厅用餐，品尝正宗湘菜。",
+          "estimated_cost_cny": 80,
+          "rationale": "晚餐安排在坡子街附近，方便继续品尝美食。"
+        },
+        {
+          "slot_id": 7,
+          "type": "hotel",
+          "time_start": "17:00",
+          "time_end": "18:30",
+          "title": "入住坡子街附近酒店",
+          "location": "坡子街",
+          "details": "预订坡子街附近中档酒店，方便第二天前往机场或火车站。",
+          "estimated_cost_cny": 300,
+          "rationale": "坡子街位置优越，交通便利，适合第二天前往机场或火车站。"
+        }
+      ]
+    },
+    {
+      "day": 3,
+      "date": "2026-05-10",
+      "overnight_city": "长沙",
+      "slots": [
+        {
+          "slot_id": 1,
+          "type": "transport",
+          "time_start": "08:00",
+          "time_end": "08:30",
+          "title": "前往机场",
+          "location": "坡子街 -> 黄花国际机场",
+          "details": "乘坐地铁2号线至黄花机场站，或乘坐机场大巴。",
+          "estimated_cost_cny": 15,
+          "rationale": "根据航班时间预留充足交通时间，确保准时抵达机场。"
+        },
+        {
+          "slot_id": 2,
+          "type": "transport",
+          "time_start": "08:30",
+          "time_end": "10:30",
+          "title": "乘坐飞机离开长沙",
+          "location": "黄花国际机场",
+          "details": "乘坐航班离开长沙，结束三天行程。",
+          "estimated_cost_cny": 0,
+          "rationale": "根据航班时间预留充足交通时间，确保准时抵达机场。"
+        },
+        {
+          "slot_id": 3,
+          "type": "buffer",
+          "time_start": "10:30",
+          "time_end": "11:00",
+          "title": "抵达目的地后休息",
+          "location": "目的地",
+          "details": "抵达目的地后，根据航班时间调整行程。",
+          "estimated_cost_cny": 0,
+          "rationale": "根据航班时间预留充足交通时间，确保准时抵达机场。"
+        }
+      ]
+    }
+  ]
+}

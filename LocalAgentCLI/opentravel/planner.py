@@ -8,84 +8,8 @@ from typing import Any
 
 from .llm_client import generate_with_model
 from .models import PlannerConfig
+from .prompt_loader import render_prompt
 from .progress import ProgressReporter
-
-
-SYSTEM_PROMPT = """
-You are a travel planning agent.
-Return ONLY valid JSON. No markdown. No explanation.
-Generate a complete day-by-day slot itinerary that follows this schema:
-{
-  "trip_summary": {
-    "origin_city": "string",
-    "destination": "string",
-    "start_date": "YYYY-MM-DD",
-    "end_date": "YYYY-MM-DD",
-    "arrival_mode": "flight|train|ferry|self_drive|mixed",
-    "travelers": 1,
-    "transport_mode": "self_drive|public_transport|mixed",
-    "budget_level": "budget|mid|premium",
-    "must_do": ["string"]
-  },
-  "days": [
-    {
-      "day": 1,
-      "date": "YYYY-MM-DD",
-      "overnight_city": "string",
-      "slots": [
-        {
-          "slot_id": 1,
-          "type": "transport|activity|meal|hotel|buffer",
-          "time_start": "HH:MM",
-          "time_end": "HH:MM",
-          "title": "string",
-          "location": "string",
-          "details": "string",
-          "estimated_cost_cny": 0,
-          "rationale": "string"
-        }
-      ]
-    }
-  ]
-}
-
-Hard constraints:
-- Do not leave empty strings.
-- Each day should end with one hotel slot.
-- Include all user must_do preferences across the whole trip.
-- Keep schedule realistic and coherent.
-"""
-
-DAY_SYSTEM_PROMPT = """
-这是按天生成模式的单日提示词，目标是让小模型一次只处理一天，降低长上下文失败概率。
-You are a travel planning agent generating exactly one day of a trip.
-Return ONLY valid JSON. No markdown. No explanation.
-Output schema:
-{
-  "day": 1,
-  "date": "YYYY-MM-DD",
-  "overnight_city": "string",
-  "slots": [
-    {
-      "slot_id": 1,
-      "type": "transport|activity|meal|hotel|buffer",
-      "time_start": "HH:MM",
-      "time_end": "HH:MM",
-      "title": "string",
-      "location": "string",
-      "details": "string",
-      "estimated_cost_cny": 0,
-      "rationale": "string"
-    }
-  ]
-}
-
-Hard constraints:
-- Generate only this single day.
-- Keep slot times realistic and non-overlapping.
-- End the day with exactly one hotel slot.
-- Respect arrival/departure context, overnight city, and must-do targets for this day.
-"""
 
 
 def _language_hint(language: str) -> str:
@@ -102,10 +26,11 @@ def _language_hint(language: str) -> str:
 def build_user_prompt(request: dict[str, Any]) -> str:
     language = str(request.get("language", "zh"))
     return (
-        f"{_language_hint(language)}\n"
-        "Generate an itinerary JSON based on this request.\n"
-        "Request JSON:\n"
-        f"{json.dumps(request, ensure_ascii=False, indent=2)}"
+        render_prompt(
+            "user/planner.txt",
+            language_hint=_language_hint(language),
+            request_json=json.dumps(request, ensure_ascii=False, indent=2),
+        )
     )
 
 
@@ -120,7 +45,7 @@ def generate_plan(
     )
     if config.use_llm:
         if progress:
-            progress.stage("使用本地模型生成", percent=35)
+            progress.stage("使用本地模型生成", percent=5)
         if config.planner_mode == "daily":
             plan = _generate_by_day_llm(request, config, language, progress=progress)
         else:
@@ -142,9 +67,9 @@ def generate_plan(
                 return plan
         print("[warn] LLM generation failed or timed out; fallback to mock planner.", flush=True)
         if progress:
-            progress.stage("切换到本地骨架生成", percent=40)
+            progress.stage("切换到本地骨架生成", percent=6)
     elif progress:
-        progress.stage("使用本地骨架生成", percent=40)
+        progress.stage("使用本地骨架生成", percent=6)
     return _generate_mock_plan(request, language)
 
 
@@ -155,10 +80,9 @@ def _generate_by_llm(
     progress: ProgressReporter | None = None,
 ) -> dict[str, Any] | None:
     if progress:
-        progress.stage("调用模型生成完整行程", percent=45)
-    started = monotonic()
+        progress.stage("调用模型生成完整行程", percent=6)
     result = generate_with_model(
-        system_prompt=f"{SYSTEM_PROMPT}\n\n{_language_hint(language)}",
+        system_prompt=render_prompt("system/planner.txt"),
         user_prompt=build_user_prompt(request),
         config=config,
         temperature=config.temperature,
@@ -166,11 +90,10 @@ def _generate_by_llm(
         expect_json=True,
     )
     if progress:
-        elapsed = monotonic() - started
         if result is None:
-            progress.stage("完整行程模型未返回", percent=55)
+            progress.stage("完整行程模型未返回", percent=7)
         else:
-            progress.stage(f"完整行程生成完成，用时 {elapsed:.1f}s", percent=55)
+            progress.stage("完整行程生成完成", percent=7)
     return result
 
 
@@ -181,44 +104,47 @@ def _generate_by_day_llm(
     progress: ProgressReporter | None = None,
 ) -> dict[str, Any] | None:
     # 先用本地骨架给出总体路线，逐天只让模型负责“填细节”。
+    started = monotonic()
     scaffold = _generate_mock_plan(request, language)
     days = scaffold["days"]
     built_days: list[dict[str, Any]] = []
     covered_texts: list[str] = []
     total_days = len(days)
 
+    if progress:
+        progress.stage("按天生成中", percent=6)
+
     for idx, day in enumerate(days):
         if progress:
-            progress.day(idx + 1, total_days, f"生成第{day['day']}天")
+            progress.log(f"生成第{day['day']}天 ({idx + 1}/{total_days})")
         remaining_must_do = _remaining_must_do(
             request.get("must_do", []),
             covered_texts,
         )
-        target_items = _target_must_do_for_day(day, remaining_must_do, idx == len(days) - 1)
+        target_items = _target_must_do_for_day(
+            day,
+            remaining_must_do,
+            idx == total_days - 1,
+        )
+        history_context = _build_history_context(built_days, covered_texts)
         day_prompt = _build_day_prompt(
             request=request,
             trip_summary=scaffold["trip_summary"],
             day=day,
             previous_day=built_days[-1] if built_days else None,
             target_items=target_items,
+            history_context=history_context,
         )
-        if progress:
-            progress.stage(f"第{day['day']}天：调用模型生成", percent=int(((idx + 1) / total_days) * 100))
-        started = monotonic()
         generated_day = generate_with_model(
-            system_prompt=f"{DAY_SYSTEM_PROMPT}\n\n{_language_hint(language)}",
+            system_prompt=render_prompt("system/planner_day.txt")
+            + "\n\n"
+            + _language_hint(language),
             user_prompt=day_prompt,
             config=config,
             temperature=config.temperature,
             max_tokens=min(config.max_tokens, 2200),
             expect_json=True,
         )
-        elapsed = monotonic() - started
-        if progress:
-            if generated_day is None:
-                progress.stage(f"第{day['day']}天：模型未返回，使用骨架", percent=int(((idx + 1) / total_days) * 100))
-            else:
-                progress.stage(f"第{day['day']}天：完成，用时 {elapsed:.1f}s", percent=int(((idx + 1) / total_days) * 100))
         if generated_day is None:
             print(f"[warn] Day {day['day']} generation failed; using scaffold day.", flush=True)
             generated_day = day
@@ -231,7 +157,8 @@ def _generate_by_day_llm(
         "days": built_days,
     }
     if progress:
-        progress.stage("按天生成完成", percent=75)
+        elapsed = monotonic() - started
+        progress.stage(f"按天生成完成，用时 {elapsed:.1f}s", percent=70)
     return plan
 
 
@@ -280,36 +207,6 @@ def _generate_mock_plan(request: dict[str, Any], language: str) -> dict[str, Any
 def _build_major_stops(
     destination: str, total_days: int, language: str
 ) -> list[dict[str, str]]:
-    if "iceland" in destination.lower() or "冰岛" in destination:
-        ring = [
-            ("Reykjanes", "Reykjavik"),
-            ("Golden Circle", "Hella"),
-            ("South Coast", "Vik"),
-            ("Skaftafell", "Hofn"),
-            ("Eastfjords", "Egilsstadir"),
-            ("Lake Myvatn", "Myvatn"),
-            ("Husavik", "Akureyri"),
-            ("Northwest", "Blonduos"),
-            ("Snaefellsnes", "Borgarnes"),
-            ("Capital Area", "Reykjavik"),
-        ]
-        if total_days <= len(ring):
-            return [
-                {"zone": _localize_zone(zone, language), "overnight_city": _localize_city(city, language)}
-                for zone, city in ring[:total_days]
-            ]
-        result = [
-            {"zone": _localize_zone(zone, language), "overnight_city": _localize_city(city, language)}
-            for zone, city in ring
-        ]
-        while len(result) < total_days:
-            result.append(
-                {
-                    "zone": _localize_zone("Flexible Day", language),
-                    "overnight_city": _localize_city("Reykjavik", language),
-                }
-            )
-        return result
     return [
         {
             "zone": _localize_text(
@@ -317,7 +214,7 @@ def _build_major_stops(
                 f"{destination}第{i + 1}天",
                 language,
             ),
-            "overnight_city": _localize_city(destination, language),
+            "overnight_city": destination,
         }
         for i in range(total_days)
     ]
@@ -595,10 +492,7 @@ def _arrival_title(
 
 
 def _arrival_hub(destination: str, arrival_mode: str) -> str:
-    destination_lower = destination.lower()
     if arrival_mode == "flight":
-        if "iceland" in destination_lower or "冰岛" in destination:
-            return "凯夫拉维克国际机场"
         return f"{destination}机场"
     if arrival_mode == "train":
         return f"{destination}火车站"
@@ -611,44 +505,6 @@ def _localize_text(en_text: str, zh_text: str, language: str) -> str:
     return zh_text if language == "zh" else en_text
 
 
-def _localize_zone(zone: str, language: str) -> str:
-    mapping = {
-        "Reykjanes": "雷克雅内斯",
-        "Golden Circle": "黄金圈",
-        "South Coast": "南岸",
-        "Skaftafell": "斯卡夫塔费尔",
-        "Eastfjords": "东峡湾",
-        "Lake Myvatn": "米湖",
-        "Husavik": "胡萨维克",
-        "Northwest": "西北部",
-        "Snaefellsnes": "斯奈山半岛",
-        "Capital Area": "首都圈",
-        "Flexible Day": "机动日",
-    }
-    if language == "zh":
-        return mapping.get(zone, zone)
-    reverse = {v: k for k, v in mapping.items()}
-    return reverse.get(zone, zone)
-
-
-def _localize_city(city: str, language: str) -> str:
-    mapping = {
-        "Reykjavik": "雷克雅未克",
-        "Hella": "赫拉",
-        "Vik": "维克",
-        "Hofn": "赫本",
-        "Egilsstadir": "埃伊尔斯塔济",
-        "Myvatn": "米湖",
-        "Akureyri": "阿克雷里",
-        "Blonduos": "布伦迪欧斯",
-        "Borgarnes": "博尔加内斯",
-    }
-    if language == "zh":
-        return mapping.get(city, city)
-    reverse = {v: k for k, v in mapping.items()}
-    return reverse.get(city, city)
-
-
 def _inject_must_do(
     day_no: int,
     date: str,
@@ -657,49 +513,6 @@ def _inject_must_do(
     stop: dict[str, str],
     language: str,
 ) -> None:
-    combined = " ".join(must_do).lower()
-
-    if ("whale" in combined or "观鲸" in combined) and day_no == 7:
-        slots[4] = {
-            "slot_id": 5,
-            "type": "activity",
-            "time_start": "15:00",
-            "time_end": "18:00",
-            "title": _localize_text("Whale watching tour", "观鲸行程", language),
-            "location": _localize_text("Husavik Harbor", "胡萨维克港口", language),
-            "details": _localize_text(
-                "Book small-group afternoon tour; sea condition dependent.",
-                "预订下午小团观鲸，具体时间受海况影响。",
-                language,
-            ),
-            "estimated_cost_cny": 700,
-            "rationale": _localize_text(
-                "North Iceland is the strongest whale-watching area.",
-                "冰岛北部是更适合观鲸的区域。",
-                language,
-            ),
-        }
-    if ("glacier" in combined or "冰川" in combined) and day_no == 4:
-        slots[2] = {
-            "slot_id": 3,
-            "type": "activity",
-            "time_start": "11:00",
-            "time_end": "14:00",
-            "title": _localize_text("Guided glacier hike", "冰川徒步", language),
-            "location": _localize_text("Skaftafell / Vatnajokull area", "斯卡夫塔费尔 / 瓦特纳冰川区域", language),
-            "details": _localize_text(
-                "Entry-level guided glacier hike with safety gear.",
-                "配备安全装备的入门级冰川徒步。",
-                language,
-            ),
-            "estimated_cost_cny": 900,
-            "rationale": _localize_text(
-                "South-east Iceland offers safer and popular guided options.",
-                "冰岛东南部有更安全、也更常见的冰川徒步线路。",
-                language,
-            ),
-        }
-
     if must_do and day_no == 2:
         joined = _localize_text(
             ", ".join(must_do),
@@ -720,6 +533,18 @@ def _inject_must_do(
         slots[2]["details"] = f"{slots[2]['details']} {focus_details}"
 
 
+def _build_history_context(
+    built_days: list[dict[str, Any]], covered_texts: list[str]
+) -> dict[str, Any]:
+    visited_highlights = _collect_visible_highlights(built_days)
+    return {
+        "days_generated": len(built_days),
+        "last_day_summary": _summarize_day(built_days[-1]) if built_days else "",
+        "visited_highlights": visited_highlights,
+        "already_covered_text": _compact_text_sample(covered_texts),
+    }
+
+
 def _build_day_prompt(
     *,
     request: dict[str, Any],
@@ -727,8 +552,9 @@ def _build_day_prompt(
     day: dict[str, Any],
     previous_day: dict[str, Any] | None,
     target_items: list[str],
+    history_context: dict[str, Any],
 ) -> str:
-    # 日生成 prompt 尽量短，只保留当天必要上下文，减少小模型负担。
+    # 日生成 prompt 尽量短，但要显式带上前文摘要，减少重复景点。
     previous_context = "none"
     if previous_day is not None:
         last_slot = previous_day["slots"][-1]
@@ -756,18 +582,22 @@ def _build_day_prompt(
             "previous_context": previous_context,
             "notes": request.get("notes", ""),
         },
+        "planning_history": history_context,
         "requirements": [
             "Generate 5 to 7 slots only.",
             "Use concrete titles and locations.",
             "End with one hotel slot in the overnight city.",
             "If this is an arrival day, include arrival transfer.",
             "If this is a departure day, include departure transfer.",
+            "Avoid repeating previously visited highlights unless the user explicitly asked for them.",
+            "Use the planning history as context and prefer new scenic spots for later days.",
         ],
     }
     return (
-        "Generate exactly one day JSON for this trip.\n"
-        "Input payload:\n"
-        f"{json.dumps(prompt_payload, ensure_ascii=False, indent=2)}"
+        render_prompt(
+            "user/planner_day.txt",
+            payload_json=json.dumps(prompt_payload, ensure_ascii=False, indent=2),
+        )
     )
 
 
@@ -789,23 +619,6 @@ def _target_must_do_for_day(
     # 根据天数和地理位置，把必须体验优先分配到更合适的一天。
     if not remaining_items:
         return []
-
-    zone_text = (
-        f"{day.get('overnight_city', '')} "
-        f"{' '.join(slot.get('title', '') for slot in day.get('slots', []))}"
-    ).lower()
-    matched: list[str] = []
-    for item in remaining_items:
-        lowered = item.lower()
-        if "whale" in lowered and ("husavik" in zone_text or "akureyri" in zone_text):
-            matched.append(item)
-        elif "glacier" in lowered and (
-            "skaftafell" in zone_text or "hofn" in zone_text or "vatnaj" in zone_text
-        ):
-            matched.append(item)
-
-    if matched:
-        return matched
     if is_last_day:
         return remaining_items
     return remaining_items[:1]
@@ -837,6 +650,41 @@ def _collect_day_texts(day: dict[str, Any]) -> list[str]:
         f"{slot.get('title', '')} {slot.get('details', '')}".lower()
         for slot in day.get("slots", [])
     ]
+
+
+def _collect_visible_highlights(built_days: list[dict[str, Any]]) -> list[str]:
+    seen: list[str] = []
+    for day in built_days:
+        for slot in day.get("slots", []):
+            if slot.get("type") not in {"activity", "transport"}:
+                continue
+            title = str(slot.get("title", "")).strip()
+            if title and title not in seen:
+                seen.append(title)
+    return seen[:12]
+
+
+def _summarize_day(day: dict[str, Any]) -> str:
+    if not day:
+        return ""
+    highlights = [
+        str(slot.get("title", "")).strip()
+        for slot in day.get("slots", [])
+        if slot.get("type") in {"activity", "transport"}
+        and str(slot.get("title", "")).strip()
+    ]
+    highlights = highlights[:4]
+    if highlights:
+        return (
+            f"Day {day.get('day')} in {day.get('overnight_city', '')} "
+            f"focuses on: {', '.join(highlights)}"
+        )
+    return f"Day {day.get('day')} ends in {day.get('overnight_city', '')}"
+
+
+def _compact_text_sample(texts: list[str], limit: int = 4) -> list[str]:
+    cleaned = [text.strip() for text in texts if text.strip()]
+    return cleaned[-limit:]
 
 
 def _day_theme_hint(day: dict[str, Any]) -> str:
