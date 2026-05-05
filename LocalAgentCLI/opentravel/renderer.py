@@ -1,4 +1,3 @@
-#渲染器：将行程计划渲染成文本或Markdown格式，方便展示和分享。
 from __future__ import annotations
 
 from typing import Any
@@ -17,6 +16,7 @@ def _render(plan: dict[str, Any], language: str, markdown: bool) -> str:
     labels = _labels(language)
     transport_mode = _summary_value_label("transport_mode", summary["transport_mode"], language)
     budget_level = _summary_value_label("budget_level", summary["budget_level"], language)
+    weather_summary = plan.get("weather_summary", {})
     lines: list[str] = []
 
     if markdown:
@@ -44,10 +44,24 @@ def _render(plan: dict[str, Any], language: str, markdown: bool) -> str:
         if markdown:
             lines.append(f"## {labels['day']} {day['day']} {labels['day_suffix']} ({day['date']})")
             lines.append(f"**{labels['overnight']}**: {day['overnight_city']}")
+            day_weather = _find_weather_day(weather_summary, day.get("date", ""))
+            if day_weather:
+                lines.append(
+                    f"**{labels['weather']}**: {day_weather['description']} | "
+                    f"{day_weather['temperature_2m_min']}~{day_weather['temperature_2m_max']}°C | "
+                    f"{_join_tips(day_weather.get('tips', []), language)}"
+                )
             lines.append("")
         else:
             lines.append(f"{labels['day']} {day['day']} {labels['day_suffix']} ({day['date']})")
             lines.append(f"{labels['overnight']}: {day['overnight_city']}")
+            day_weather = _find_weather_day(weather_summary, day.get("date", ""))
+            if day_weather:
+                lines.append(
+                    f"{labels['weather']}: {day_weather['description']} | "
+                    f"{day_weather['temperature_2m_min']}~{day_weather['temperature_2m_max']}°C | "
+                    f"{_join_tips(day_weather.get('tips', []), language)}"
+                )
 
         for slot in day["slots"]:
             cost = int(slot.get("estimated_cost_cny", 0))
@@ -71,9 +85,14 @@ def _render_slot_block(
     title = str(slot.get("title", "")).strip()
     location = str(slot.get("location", "")).strip()
     details = str(slot.get("details", "")).strip()
-    cost_text = f"费用约{cost}元" if cost > 0 else "费用约0元"
+    cost_text = (
+        f"费用约{cost}元" if cost > 0 else "费用约0元"
+        if _has_chinese(title + location + details)
+        else f"Estimated cost: CNY {cost}"
+    )
     detail_line = f"{details} {cost_text}".strip()
-    first_line = f"[{slot['slot_id']}] {slot['time_start']}-{slot['time_end']} {_slot_icon(slot['type'])} {slot_type}: {title}"
+    icon = _slot_icon(slot["type"])
+    first_line = f"[{slot['slot_id']}] {slot['time_start']}-{slot['time_end']} {icon} {slot_type}: {title}"
 
     if markdown:
         return [
@@ -97,6 +116,7 @@ def _labels(language: str) -> dict[str, str]:
             "mode": "Mode",
             "budget": "Budget",
             "must_do": "Must-do",
+            "weather": "Weather",
             "day": "Day",
             "day_suffix": "",
             "overnight": "Overnight",
@@ -110,6 +130,7 @@ def _labels(language: str) -> dict[str, str]:
         "mode": "交通方式",
         "budget": "预算",
         "must_do": "必须安排",
+        "weather": "天气",
         "day": "第",
         "day_suffix": "天",
         "overnight": "住宿",
@@ -133,13 +154,13 @@ def _slot_type_label(slot_type: str, language: str) -> str:
 
 def _slot_icon(slot_type: str) -> str:
     icons = {
-        "transport": "🚇",
-        "activity": "🎡",
-        "meal": "🍜",
-        "hotel": "🏨",
-        "buffer": "⏳",
+        "transport": "[T]",
+        "activity": "[A]",
+        "meal": "[M]",
+        "hotel": "[H]",
+        "buffer": "[B]",
     }
-    return icons.get(slot_type, "•")
+    return icons.get(slot_type, "[ ]")
 
 
 def _summary_value_label(field: str, value: str, language: str) -> str:
@@ -158,3 +179,24 @@ def _summary_value_label(field: str, value: str, language: str) -> str:
     field_map = mapping.get(field, {})
     zh, en = field_map.get(value, (value, value))
     return zh if language == "zh" else en
+
+
+def _find_weather_day(weather_summary: dict[str, Any], date_text: str) -> dict[str, Any] | None:
+    days = weather_summary.get("forecast_days", [])
+    if not isinstance(days, list):
+        return None
+    for day in days:
+        if isinstance(day, dict) and str(day.get("date", "")) == str(date_text):
+            return day
+    return None
+
+
+def _join_tips(tips: Any, language: str) -> str:
+    if not isinstance(tips, list) or not tips:
+        return "天气舒适，正常游览" if language == "zh" else "comfortable sightseeing weather"
+    cleaned = [str(tip).strip() for tip in tips if str(tip).strip()]
+    return "；".join(cleaned) if language == "zh" else "; ".join(cleaned)
+
+
+def _has_chinese(text: str) -> bool:
+    return any("\u4e00" <= ch <= "\u9fff" for ch in text)
