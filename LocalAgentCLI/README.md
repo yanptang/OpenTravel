@@ -16,6 +16,9 @@ OpenTravel 本地 CLI 版本用于验证“旅行需求输入 -> 多轮澄清 ->
 - 支持导出 Markdown 行程文档 `plan.md`
 - 支持按运行批次落盘到独立目录，避免覆盖历史结果
 - 支持实时阶段进度日志，显示“当前在做什么”和每个 day 的耗时
+- 支持轻量 RAG：本地知识库检索 + prompt 注入
+- 支持独立评估目录与批量评估脚本
+- 支持 LangGraph 编排实验版本
 
 ## 语言策略
 
@@ -51,6 +54,8 @@ OpenTravel 本地 CLI 版本用于验证“旅行需求输入 -> 多轮澄清 ->
 - `main.py`：命令行入口，负责读取输入、执行校验、生成计划、导出结果。
 - `opentravel/`：核心业务模块，包含澄清、模型调用、验证、渲染和交互编辑。
 - `prompts/`：外置 prompt 模板目录，分为 `system/` 和 `user/` 两层，存放 planner / clarifier / refiner 的提示词。
+- `knowledge/`：本地知识库目录，供轻量 RAG 检索使用。
+- `evaluation/`：评估脚本、结果报告、case 级攻略与错误明细。
 - `sample_request.json`：通用示例输入文件。
 - `tianjin_beijing_request.json`：中文示例输入文件，用于测试两日游场景。
 - `outputs/`：默认输出目录，存放生成结果。
@@ -142,11 +147,31 @@ python main.py --input tianjin_beijing_request.json --no-progress
 
 如果你不想看阶段日志，可以关闭。默认会在 stderr 打印轻量进度，不影响最终 Markdown 输出。
 
+### 9. 使用轻量 RAG
+
+```bash
+python main.py --input inputs/tianjin_beijing_request.json --planner-mode whole --artifact-dir outputs/rag_beijing
+```
+
+默认会开启轻量 RAG，流程是：
+
+- 从 `knowledge/` 目录读取本地知识片段
+- 按 `destination / origin / must_do / notes` 做关键词召回
+- 取前 `top_k` 个片段注入 planner prompt
+- 将本次检索结果写入 `retrieval_context.json`
+
+相关参数：
+
+- `--no-rag`
+- `--rag-top-k`
+- `--rag-dir`
+
 ## 输出文件
 
 默认一次运行会生成三类文件：
 
 - `request.json`：本次运行的输入快照
+- `retrieval_context.json`：如果启用 RAG，本次检索到的知识片段
 - `plan.json`：结构化行程结果
 - `plan.md`：按天展示的可读攻略
 
@@ -230,6 +255,35 @@ python main.py --input tianjin_beijing_request.json --no-clarify --planner-mode 
 3. 增加用户偏好记忆
 4. 增加更细的 `slot` 重排能力
 5. 如果未来接实时工具，再加入航班、酒店和地图查询
+
+## 评估与实验
+
+### 评估
+
+评估内容统一收口在：
+
+- [evaluation/README.md](/c:/Users/Administrator/Desktop/HPC_Projects/OpenTravel/LocalAgentCLI/evaluation/README.md:1)
+
+评估目录下包含：
+
+- `eval_runner.py`
+- 中文 `report.md`
+- `summary.json`
+- `cases.csv`
+- 每条 case 的最终 `plan.md`
+- 每条 case 的 `issues.json`
+
+### LangGraph 实验
+
+LangGraph 实验代码在：
+
+- [experiments/langgraph_spike/README.md](/c:/Users/Administrator/Desktop/HPC_Projects/OpenTravel/experiments/langgraph_spike/README.md:1)
+
+这一版的重点是：
+
+- 复用现有业务逻辑
+- 把 `generate -> validate -> refine -> finalize` 包成 graph node
+- 用最小成本理解 LangGraph 的编排方式
 
 ## 参数速查
 

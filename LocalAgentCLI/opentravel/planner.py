@@ -10,6 +10,7 @@ from .llm_client import generate_with_model
 from .models import PlannerConfig
 from .prompt_loader import render_prompt
 from .progress import ProgressReporter
+from .rag import format_retrieval_context
 
 
 def _language_hint(language: str) -> str:
@@ -30,6 +31,7 @@ def build_user_prompt(request: dict[str, Any]) -> str:
             "user/planner.txt",
             language_hint=_language_hint(language),
             request_json=json.dumps(request, ensure_ascii=False, indent=2),
+            retrieval_context=format_retrieval_context(request.get("retrieval_context")),
         )
     )
 
@@ -583,6 +585,7 @@ def _build_day_prompt(
             "notes": request.get("notes", ""),
         },
         "planning_history": history_context,
+        "retrieval_context": request.get("retrieval_context", {}),
         "requirements": [
             "Generate 5 to 7 slots only.",
             "Use concrete titles and locations.",

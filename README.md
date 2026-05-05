@@ -78,12 +78,15 @@
 - 支持本地 Ollama 模型直连
 - 支持 `daily` 分段生成模式
 - 支持终端内交互修改
+- 支持轻量 RAG
+- 支持批量评估
+- 支持 LangGraph 编排实验
 
 主线实现与说明请直接查看：
 
 - [本地 CLI 说明](./LocalAgentCLI/README.md)
 - [项目文档](./docs/README.md)
-- [开发日志](./LocalAgentCLI/开发日志.md)
+- [开发日志](./docs/开发日志.md)
 - [项目结构说明](./LocalAgentCLI/项目结构说明.md)
 - [下阶段开发计划](./docs/next_phase_plan.md)
 - [攻略生成准则](./docs/travel_planning_principles.md)
@@ -113,11 +116,32 @@ OpenTravel/
   assets/
   archive/
   LocalAgentCLI/
+  experiments/
 ```
 
 ### `LocalAgentCLI/`
 
-当前可运行版本，包含命令行入口、核心业务模块、示例输入、输出结果和完整说明文档。
+当前可运行主线，包含：
+
+- 命令行入口
+- 核心业务模块
+- `inputs/` 示例请求
+- `knowledge/` 本地知识库
+- `evaluation/` 评估脚本与结果
+- 输出结果和完整说明文档
+
+这是现在真正承载主能力的目录。
+
+### `experiments/`
+
+实验区，用来放不直接影响主线的框架尝试和编排实验。
+
+当前主要包括：
+
+- `langgraph_spike/`
+  - 用最小成本复用现有业务逻辑
+  - 把 `generate -> validate -> refine -> finalize` 包成 graph
+  - 输出独立保存在 `experiments/langgraph_spike/outputs/`
 
 ### `archive/`
 
@@ -129,7 +153,7 @@ OpenTravel/
 
 ### `docs/`
 
-项目级文档入口，保存下一阶段开发计划、攻略生成准则等全局指导文档。
+项目级文档入口，保存开发日志、阶段判断、开发计划和全局说明文档。
 
 ---
 
@@ -138,33 +162,47 @@ OpenTravel/
 ```mermaid
 flowchart LR
   A[旅行需求输入] --> B[多轮澄清]
-  B --> C[行程生成]
-  C --> D[规则校验]
-  D --> E[局部修改]
-  E --> F[结果导出]
+  B --> C[RAG 检索本地知识]
+  C --> D[行程生成]
+  D --> E[规则校验]
+  E --> F[局部修改]
+  F --> G[结果导出]
+  G --> H[批量评估]
 ```
 
 ---
 
 ## 作品展示
 
-当前版本的输出会同时保留两种形态：
+当前版本的结果已经不只是“生成一个 plan”，而是会同时留下：
 
 | 形态 | 用途 | 示例 |
 | --- | --- | --- |
-| `plan.json` | 机器可继续处理的结构化中间态 | [输出文件](./LocalAgentCLI/outputs/plan.json) |
-| `plan.txt` | 给人直接阅读的行程攻略 | [输出文件](./LocalAgentCLI/outputs/plan.txt) |
+| `plan.json` | 机器可继续处理的结构化中间态 | `LocalAgentCLI/outputs/.../plan.json` |
+| `plan.md` | 给人直接阅读的最终攻略 | `LocalAgentCLI/outputs/.../plan.md` |
+| `retrieval_context.json` | 本次 RAG 检索到的知识片段 | `LocalAgentCLI/outputs/.../retrieval_context.json` |
+| `evaluation/report.md` | 中文评估报告 | [评估报告](./LocalAgentCLI/evaluation/runs/eval_qwen35_4b_20260505_rerun/report.md) |
+| `evaluation/cases/.../plan.md` | 评估中每条 case 的最终攻略 | [评估案例](./LocalAgentCLI/evaluation/runs/eval_qwen35_4b_20260505_rerun/cases/llm_repair/sample_request/plan.md) |
+| `evaluation/cases/.../issues.json` | 每条 case 的错误明细与错误类型统计 | [错误明细](./LocalAgentCLI/evaluation/runs/eval_qwen35_4b_20260505_rerun/cases/llm_repair/sample_request/issues.json) |
+| `experiments/langgraph_spike/outputs/...` | LangGraph 实验产物 | [LangGraph 输出目录](./experiments/langgraph_spike/outputs/) |
 
 <details>
-<summary>展开查看一段示例输出</summary>
+<summary>展开查看一段当前主线示例输出</summary>
 
 ```text
-Day 1 (2026-05-10) | Overnight: Reykjavik
-  [1] 07:00-10:30 transport: Fly from Gothenburg to Iceland
-  [2] 10:30-12:00 transport: Pick up rental car and drive to city
-  [3] 12:00-13:00 meal: Arrival lunch
-  [4] 14:00-17:00 activity: Reykjanes easy intro sightseeing
-  [5] 18:30-23:00 hotel: Check in accommodation
+# OpenTravel 行程
+
+**北京** | 2026-04-20 至 2026-04-21
+人数: 2 | 交通方式: 公共交通 | 预算: 均衡
+必须安排: 故宫, 北京烤鸭
+
+## 第 1 天 (2026-04-20)
+- [1] 08:00-08:45 [T] 交通: 前往北京西站
+- [2] 09:00-12:00 [A] 活动: 游览故宫
+- [3] 12:00-13:30 [M] 餐饮: 午餐：尝试北京烤鸭
+- [4] 13:30-14:00 [T] 交通: 前往酒店
+- [5] 14:00-16:00 [A] 活动: 自由活动
+- [6] 16:00-16:30 [H] 住宿: 入住酒店
 ```
 
 </details>
@@ -175,17 +213,33 @@ Day 1 (2026-05-10) | Overnight: Reykjavik
 
 | 阶段 | 目标 | 当前状态 |
 | --- | --- | --- |
-| Phase 1 | 本地 CLI 闭环 | 已完成 |
-| Phase 2 | 多轮澄清 + 时间线 + 跨天闭环 | 进行中 |
-| Phase 3 | 偏好记忆 | 待开始 |
+| Phase 1 | 本地 CLI 闭环 + 评估 + LangGraph spike + 轻量 RAG | 已完成 |
+| Phase 2 | 行程质量优化，重点攻克 transport continuity | 进行中 |
+| Phase 3 | 偏好记忆与更强的个性化 | 待开始 |
 | Phase 4 | 工具接入与外部信息增强 | 待开始 |
 
 ### 阶段说明
 
 - Phase 1：先把最小可运行版本做出来
-- Phase 2：继续强化对话式澄清、时间线组织和跨天闭环
+- Phase 2：继续强化对话式澄清、时间线组织和跨天闭环，并用评估体系持续验证收益
 - Phase 3：沉淀偏好记忆，让系统记住用户的旅行风格
 - Phase 4：再考虑外部工具和实时信息接入
+
+## 当前阶段总结
+
+如果把项目作为面试作品来看，当前已经具备比较完整的第一阶段形态：
+
+- 有本地可运行主线
+- 有规则校验和 repair 闭环
+- 有批量评估和错误类型统计
+- 有 LangGraph 编排实验
+- 有轻量 RAG 基线
+
+目前最值得继续投入的方向不再是横向堆更多名词，而是：
+
+- 用评估验证 `with_rag vs no_rag`
+- 优先降低 `transport continuity` 错误
+- 补架构图和演示路径
 
 ---
 

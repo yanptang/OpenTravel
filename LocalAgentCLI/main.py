@@ -16,6 +16,7 @@ from opentravel.models import PlannerConfig
 from opentravel.plan_validation import validate_plan
 from opentravel.planner import generate_plan
 from opentravel.progress import ProgressReporter
+from opentravel.rag import build_retrieval_context
 from opentravel.refiner import refine_plan
 from opentravel.renderer import render_markdown, render_text
 from opentravel.weather import build_weather_summary
@@ -41,6 +42,9 @@ def main() -> int:
     parser.add_argument("--no-weather", action="store_true")
     parser.add_argument("--skip-repair", action="store_true")
     parser.add_argument("--edit", action="store_true")
+    parser.add_argument("--no-rag", action="store_true")
+    parser.add_argument("--rag-top-k", type=int, default=4)
+    parser.add_argument("--rag-dir", default="")
     args = parser.parse_args()
 
     request_path = _resolve_input_path(base_dir, args.input)
@@ -63,6 +67,9 @@ def main() -> int:
         max_tokens=max(128, args.max_tokens),
         request_timeout_sec=max(30, args.timeout_sec),
         refine_retries=max(0, args.refine_retries),
+        use_rag=(not args.no_rag),
+        rag_top_k=max(1, args.rag_top_k),
+        rag_dir=args.rag_dir,
     )
 
     if not args.no_clarify:
@@ -91,6 +98,14 @@ def main() -> int:
         encoding="utf-8",
     )
     print(f"Saved request snapshot to: {request_snapshot}")
+
+    if config.use_rag:
+        progress.stage("检索本地知识片段", percent=4)
+        retrieval_context = build_retrieval_context(request, config)
+        if retrieval_context is not None:
+            request["retrieval_context"] = retrieval_context
+            _write_json(artifact_dir / "retrieval_context.json", retrieval_context)
+            print(f"Saved retrieval context to: {artifact_dir / 'retrieval_context.json'}")
 
     progress.stage("开始生成行程", percent=5)
     plan = generate_plan(request, config, progress=progress)

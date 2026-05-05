@@ -39,13 +39,13 @@ Install dependencies from `LocalAgentCLI/requirements.txt`, then:
 
 ```bash
 cd experiments/langgraph_spike
-python main.py --input ..\..\LocalAgentCLI\sample_request.json
+python main.py --input ..\..\LocalAgentCLI\inputs\sample_request.json
 ```
 
 Run without LLM:
 
 ```bash
-python main.py --input ..\..\LocalAgentCLI\sample_request.json --no-llm
+python main.py --input ..\..\LocalAgentCLI\inputs\sample_request.json --no-llm
 ```
 
 ## Outputs
@@ -53,7 +53,7 @@ python main.py --input ..\..\LocalAgentCLI\sample_request.json --no-llm
 Artifacts are written to:
 
 ```text
-LocalAgentCLI/outputs/langgraph_spike/latest/
+experiments/langgraph_spike/outputs/latest/
 ```
 
 Typical files:
@@ -136,7 +136,7 @@ python main.py --input ..\..\LocalAgentCLI\inputs\sample_request.json --no-llm
 默认会把结果写到：
 
 ```text
-LocalAgentCLI/outputs/langgraph_spike/latest/
+experiments/langgraph_spike/outputs/latest/
 ```
 
 常见输出包括：

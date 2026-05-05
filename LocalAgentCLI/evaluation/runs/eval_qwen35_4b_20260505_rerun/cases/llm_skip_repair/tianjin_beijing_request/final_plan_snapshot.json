@@ -1,0 +1,142 @@
+{
+  "trip_summary": {
+    "origin_city": "天津",
+    "destination": "北京",
+    "start_date": "2026-04-20",
+    "end_date": "2026-04-21",
+    "arrival_mode": "train",
+    "travelers": 2,
+    "transport_mode": "public_transport",
+    "budget_level": "mid",
+    "must_do": [
+      "故宫",
+      "北京烤鸭"
+    ]
+  },
+  "days": [
+    {
+      "day": 1,
+      "date": "2026-04-20",
+      "overnight_city": "北京",
+      "slots": [
+        {
+          "slot_id": 1,
+          "type": "transport",
+          "time_start": "08:00",
+          "time_end": "09:30",
+          "title": "前往北京站",
+          "location": "天津站",
+          "details": "乘坐高铁前往北京站，预计耗时约1.5小时。",
+          "estimated_cost_cny": 120,
+          "rationale": "从天津出发，利用高铁快速抵达北京，为当日行程预留充足时间。"
+        },
+        {
+          "slot_id": 2,
+          "type": "activity",
+          "time_start": "10:00",
+          "time_end": "12:30",
+          "title": "游览故宫",
+          "location": "故宫博物院",
+          "details": "进入故宫博物院，参观太和殿、中和殿、保和殿及乾清宫等主要建筑，感受皇家气派。",
+          "estimated_cost_cny": 60,
+          "rationale": "故宫是必做项目，安排在上午精力充沛时游览，避开人流高峰。"
+        },
+        {
+          "slot_id": 3,
+          "type": "meal",
+          "time_start": "12:30",
+          "time_end": "13:30",
+          "title": "午餐：尝试北京烤鸭",
+          "location": "四季民福烤鸭店（故宫店）",
+          "details": "品尝正宗北京烤鸭，搭配葱丝、黄瓜和甜面酱，体验地道京味。",
+          "estimated_cost_cny": 280,
+          "rationale": "满足必做项目中的烤鸭需求，选择靠近故宫的餐厅，方便后续移动。"
+        },
+        {
+          "slot_id": 4,
+          "type": "activity",
+          "time_start": "14:00",
+          "time_end": "16:30",
+          "title": "漫步景山公园",
+          "location": "景山公园",
+          "details": "从故宫北门步行至景山公园，登顶万春亭俯瞰中轴线全景，拍摄故宫全景照片。",
+          "estimated_cost_cny": 0,
+          "rationale": "作为故宫的延伸游览，景山公园可轻松步行到达，且能俯瞰故宫全貌，增加行程深度。"
+        },
+        {
+          "slot_id": 5,
+          "type": "transport",
+          "time_start": "17:00",
+          "time_end": "18:00",
+          "title": "前往酒店",
+          "location": "北京站",
+          "details": "从景山公园步行至北京站附近，或乘坐地铁前往预定酒店区域。",
+          "estimated_cost_cny": 10,
+          "rationale": "将酒店安排在靠近交通枢纽的位置，便于次日返程，同时方便前往地铁站。"
+        },
+        {
+          "slot_id": 6,
+          "type": "hotel",
+          "time_start": "18:00",
+          "time_end": "20:00",
+          "title": "入住酒店",
+          "location": "北京站附近酒店",
+          "details": "办理入住手续，休息放松，为次日行程做准备。",
+          "estimated_cost_cny": 400,
+          "rationale": "选择北京站附近的酒店，既方便次日乘坐火车离开，又能快速到达地铁站。"
+        }
+      ]
+    },
+    {
+      "day": 2,
+      "date": "2026-04-21",
+      "overnight_city": "北京",
+      "slots": [
+        {
+          "slot_id": 1,
+          "type": "transport",
+          "time_start": "08:00",
+          "time_end": "09:00",
+          "title": "前往地铁站",
+          "location": "酒店",
+          "details": "从酒店步行至最近的地铁站，准备乘坐地铁前往火车站。",
+          "estimated_cost_cny": 5,
+          "rationale": "从酒店出发，利用步行时间规划路线，确保准时到达地铁站。"
+        },
+        {
+          "slot_id": 2,
+          "type": "transport",
+          "time_start": "09:00",
+          "time_end": "10:30",
+          "title": "前往北京南站",
+          "location": "北京站",
+          "details": "乘坐地铁或公交前往北京南站，准备返回天津。",
+          "estimated_cost_cny": 10,
+          "rationale": "从北京站出发，前往北京南站，利用公共交通完成返程准备。"
+        },
+        {
+          "slot_id": 3,
+          "type": "transport",
+          "time_start": "10:30",
+          "time_end": "12:00",
+          "title": "乘坐高铁返回天津",
+          "location": "北京南站",
+          "details": "乘坐G字头高铁从北京南站返回天津站，预计耗时约1.5小时。",
+          "estimated_cost_cny": 120,
+          "rationale": "根据返程时间规划，确保在12:00前抵达天津站，为后续安排留出缓冲时间。"
+        },
+        {
+          "slot_id": 4,
+          "type": "transport",
+          "time_start": "12:00",
+          "time_end": "13:00",
+          "title": "抵达天津站",
+          "location": "北京南站",
+          "details": "抵达天津站，结束行程。",
+          "estimated_cost_cny": 0,
+          "rationale": "完成当日交通任务，安全抵达出发城市。"
+        }
+      ]
+    }
+  ]
+}

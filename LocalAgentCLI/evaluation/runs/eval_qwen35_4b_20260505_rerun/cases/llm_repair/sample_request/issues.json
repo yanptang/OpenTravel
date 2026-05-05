@@ -1,0 +1,102 @@
+{
+  "scenario": "llm_repair",
+  "scenario_description_zh": "完整主链路：生成、校验、repair。",
+  "request_file": "sample_request.json",
+  "request_path": "C:\\Users\\Administrator\\Desktop\\HPC_Projects\\OpenTravel\\LocalAgentCLI\\inputs\\sample_request.json",
+  "runtime_sec": 647.217,
+  "returncode": 0,
+  "before_error_count": 9,
+  "after_error_count": 9,
+  "before_error_bucket_counts": {
+    "must_do": 0,
+    "time": 0,
+    "transport": 9,
+    "hotel": 0,
+    "mixed_language": 0,
+    "other": 0
+  },
+  "after_error_bucket_counts": {
+    "must_do": 0,
+    "time": 0,
+    "transport": 9,
+    "hotel": 0,
+    "mixed_language": 0,
+    "other": 0
+  },
+  "before_errors": [
+    {
+      "en": "Day 2 slot 2 transport needs a clear origin and destination.",
+      "zh": "第2天，第2个 slot：交通段缺少明确的出发地和目的地。"
+    },
+    {
+      "en": "Day 3 slot 2 transport needs a clear origin and destination.",
+      "zh": "第3天，第2个 slot：交通段缺少明确的出发地和目的地。"
+    },
+    {
+      "en": "Day 4 slot 2 transport needs a clear origin and destination.",
+      "zh": "第4天，第2个 slot：交通段缺少明确的出发地和目的地。"
+    },
+    {
+      "en": "Day 5 slot 2 transport needs a clear origin and destination.",
+      "zh": "第5天，第2个 slot：交通段缺少明确的出发地和目的地。"
+    },
+    {
+      "en": "Day 6 slot 2 transport needs a clear origin and destination.",
+      "zh": "第6天，第2个 slot：交通段缺少明确的出发地和目的地。"
+    },
+    {
+      "en": "Day 7 slot 2 transport needs a clear origin and destination.",
+      "zh": "第7天，第2个 slot：交通段缺少明确的出发地和目的地。"
+    },
+    {
+      "en": "Day 8 slot 2 transport needs a clear origin and destination.",
+      "zh": "第8天，第2个 slot：交通段缺少明确的出发地和目的地。"
+    },
+    {
+      "en": "Day 9 slot 2 transport needs a clear origin and destination.",
+      "zh": "第9天，第2个 slot：交通段缺少明确的出发地和目的地。"
+    },
+    {
+      "en": "Day 10 slot 2 transport needs a clear origin and destination.",
+      "zh": "第10天，第2个 slot：交通段缺少明确的出发地和目的地。"
+    }
+  ],
+  "after_errors": [
+    {
+      "en": "Day 2 slot 2 transport needs a clear origin and destination.",
+      "zh": "第2天，第2个 slot：交通段缺少明确的出发地和目的地。"
+    },
+    {
+      "en": "Day 3 slot 2 transport needs a clear origin and destination.",
+      "zh": "第3天，第2个 slot：交通段缺少明确的出发地和目的地。"
+    },
+    {
+      "en": "Day 4 slot 2 transport needs a clear origin and destination.",
+      "zh": "第4天，第2个 slot：交通段缺少明确的出发地和目的地。"
+    },
+    {
+      "en": "Day 5 slot 2 transport needs a clear origin and destination.",
+      "zh": "第5天，第2个 slot：交通段缺少明确的出发地和目的地。"
+    },
+    {
+      "en": "Day 6 slot 2 transport needs a clear origin and destination.",
+      "zh": "第6天，第2个 slot：交通段缺少明确的出发地和目的地。"
+    },
+    {
+      "en": "Day 7 slot 2 transport needs a clear origin and destination.",
+      "zh": "第7天，第2个 slot：交通段缺少明确的出发地和目的地。"
+    },
+    {
+      "en": "Day 8 slot 2 transport needs a clear origin and destination.",
+      "zh": "第8天，第2个 slot：交通段缺少明确的出发地和目的地。"
+    },
+    {
+      "en": "Day 9 slot 2 transport needs a clear origin and destination.",
+      "zh": "第9天，第2个 slot：交通段缺少明确的出发地和目的地。"
+    },
+    {
+      "en": "Day 10 slot 2 transport needs a clear origin and destination.",
+      "zh": "第10天，第2个 slot：交通段缺少明确的出发地和目的地。"
+    }
+  ]
+}

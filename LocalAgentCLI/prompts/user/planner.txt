@@ -11,3 +11,6 @@ Make every transport slot explicit about where it starts and where it ends.
 
 Request JSON:
 $request_json
+
+Retrieved knowledge:
+$retrieval_context

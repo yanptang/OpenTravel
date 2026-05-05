@@ -4,7 +4,7 @@
 - Model: `ollama/qwen3.5:4b`
 - Inputs: `3`
 - Scenarios: `no_llm`, `llm_skip_repair`, `llm_repair`
-- Raw artifacts: [report.md](/c:/Users/Administrator/Desktop/HPC_Projects/OpenTravel/LocalAgentCLI/outputs/eval_runs/eval_qwen35_4b_20260505/report.md:1), [summary.json](/c:/Users/Administrator/Desktop/HPC_Projects/OpenTravel/LocalAgentCLI/outputs/eval_runs/eval_qwen35_4b_20260505/summary.json:1)
+- Raw artifacts: [report.md](/c:/Users/Administrator/Desktop/HPC_Projects/OpenTravel/LocalAgentCLI/evaluation/runs/eval_qwen35_4b_20260505/report.md:1), [summary.json](/c:/Users/Administrator/Desktop/HPC_Projects/OpenTravel/LocalAgentCLI/evaluation/runs/eval_qwen35_4b_20260505/summary.json:1)
 
 ## Test Set
 
@@ -18,7 +18,7 @@ Main evaluation:
 
 ```bash
 cd LocalAgentCLI
-python eval_runner.py --model ollama/qwen3.5:4b --label eval_qwen35_4b_20260505
+python evaluation/eval_runner.py --model ollama/qwen3.5:4b --label eval_qwen35_4b_20260505
 ```
 
 LangGraph smoke check:
@@ -42,13 +42,13 @@ python main.py --input ..\..\LocalAgentCLI\inputs\sample_request.json --no-llm -
 - `must_do` coverage is strong on this small test set: all scenarios reached `100%`.
 - The current weak point is not must-do or time conflicts, but route continuity and structure repair.
 - `repair` helped a little on the small-city cases, but it did not fix the hardest sample end to end.
-- The Iceland sample remained the hardest case and still carried `9` transport/continuity errors after repair.
+- The Iceland sample remained the hardest case and still carried `9` transport or continuity errors after repair.
 
 ## Per-Case Takeaways
 
 - `天津 -> 北京` was the cleanest route. `no_llm` already passed, and `llm_repair` reduced errors from `2` to `1`.
 - `衡阳 -> 长沙` was generally workable, but `llm_repair` traded one transport issue for one hotel-closing issue.
-- `Gothenburg -> Iceland` exposed the current planner/refiner ceiling. It consistently kept `9` errors across all three scenarios.
+- `Gothenburg -> Iceland` exposed the current planner and refiner ceiling. It consistently kept `9` errors across all three scenarios.
 
 ## Interview-Ready Summary
 

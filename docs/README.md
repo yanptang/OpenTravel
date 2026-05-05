@@ -9,6 +9,7 @@
 - [模型与算力策略](./model_and_compute_strategy.md)
 - [项目运行流程](./项目运行流程.md)
 - [项目结构说明](./项目结构说明.md)
+- [开发日志](./开发日志.md)
 
 ## 阅读顺序
 
@@ -40,3 +41,21 @@
 当前项目的最新理解可以先记住一句话：
 
 > 生成主线先以 `whole` 为主，修复链路已经切到“validation 诊断 + refiner 局部重绘”的闭环，`daily` 后续继续优化，但暂时不承担当前阶段的主质量目标。
+
+## 2026-05-05 阶段补充
+
+当前仓库已经进入“第一阶段收尾”状态，除了主线 CLI 以外，还补齐了 3 类非常适合面试展示的材料：
+
+- `LocalAgentCLI/evaluation/`
+  - 可重复评估脚本、中文报告、case 级攻略和错误明细
+- `experiments/langgraph_spike/`
+  - LangGraph 编排实验
+- `LocalAgentCLI/knowledge/`
+  - 第一版轻量 RAG 本地知识库
+
+如果现在接手项目，建议新增阅读顺序：
+
+1. `docs/开发日志.md`
+2. `LocalAgentCLI/evaluation/README.md`
+3. `experiments/langgraph_spike/README.md`
+4. `LocalAgentCLI/README.md`

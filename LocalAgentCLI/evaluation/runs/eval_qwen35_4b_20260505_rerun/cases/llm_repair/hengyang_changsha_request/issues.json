@@ -1,0 +1,28 @@
+{
+  "scenario": "llm_repair",
+  "scenario_description_zh": "完整主链路：生成、校验、repair。",
+  "request_file": "hengyang_changsha_request.json",
+  "request_path": "C:\\Users\\Administrator\\Desktop\\HPC_Projects\\OpenTravel\\LocalAgentCLI\\inputs\\hengyang_changsha_request.json",
+  "runtime_sec": 69.982,
+  "returncode": 0,
+  "before_error_count": 0,
+  "after_error_count": 0,
+  "before_error_bucket_counts": {
+    "must_do": 0,
+    "time": 0,
+    "transport": 0,
+    "hotel": 0,
+    "mixed_language": 0,
+    "other": 0
+  },
+  "after_error_bucket_counts": {
+    "must_do": 0,
+    "time": 0,
+    "transport": 0,
+    "hotel": 0,
+    "mixed_language": 0,
+    "other": 0
+  },
+  "before_errors": [],
+  "after_errors": []
+}

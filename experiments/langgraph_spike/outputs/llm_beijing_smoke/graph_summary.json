@@ -1,0 +1,49 @@
+{
+  "final_valid": true,
+  "remaining_errors": [],
+  "round_index": 2,
+  "history": [
+    {
+      "node": "generate",
+      "planner_mode": "whole",
+      "use_llm": true
+    },
+    {
+      "node": "validate",
+      "round_index": 0,
+      "valid": false,
+      "error_count": 1,
+      "errors": [
+        "Day 2 slot 2 should clearly connect from the previous stop."
+      ]
+    },
+    {
+      "node": "refine",
+      "round_index": 1,
+      "changed": true,
+      "incoming_error_count": 1
+    },
+    {
+      "node": "validate",
+      "round_index": 1,
+      "valid": false,
+      "error_count": 1,
+      "errors": [
+        "Day 2 slot 2 should clearly connect from the previous stop."
+      ]
+    },
+    {
+      "node": "refine",
+      "round_index": 2,
+      "changed": true,
+      "incoming_error_count": 1
+    },
+    {
+      "node": "validate",
+      "round_index": 2,
+      "valid": true,
+      "error_count": 0,
+      "errors": []
+    }
+  ]
+}

@@ -44,6 +44,9 @@ class PlannerConfig:
     max_tokens: int = 4096
     request_timeout_sec: int = 900
     refine_retries: int = 2
+    use_rag: bool = True
+    rag_top_k: int = 4
+    rag_dir: str = ""
 
 
 def ensure_dict(value: Any, label: str) -> dict[str, Any]:

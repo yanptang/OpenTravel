@@ -1,0 +1,38 @@
+{
+  "scenario": "llm_repair",
+  "scenario_description_zh": "完整主链路：生成、校验、repair。",
+  "request_file": "tianjin_beijing_request.json",
+  "request_path": "C:\\Users\\Administrator\\Desktop\\HPC_Projects\\OpenTravel\\LocalAgentCLI\\inputs\\tianjin_beijing_request.json",
+  "runtime_sec": 93.89,
+  "returncode": 0,
+  "before_error_count": 1,
+  "after_error_count": 1,
+  "before_error_bucket_counts": {
+    "must_do": 0,
+    "time": 0,
+    "transport": 1,
+    "hotel": 0,
+    "mixed_language": 0,
+    "other": 0
+  },
+  "after_error_bucket_counts": {
+    "must_do": 0,
+    "time": 0,
+    "transport": 1,
+    "hotel": 0,
+    "mixed_language": 0,
+    "other": 0
+  },
+  "before_errors": [
+    {
+      "en": "Day 1 slot 5 should clearly connect from the previous stop.",
+      "zh": "第1天，第5个 slot：这段行程没有和上一个地点形成清晰衔接。"
+    }
+  ],
+  "after_errors": [
+    {
+      "en": "Day 1 slot 5 should clearly connect from the previous stop.",
+      "zh": "第1天，第5个 slot：这段行程没有和上一个地点形成清晰衔接。"
+    }
+  ]
+}

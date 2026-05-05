@@ -1,0 +1,65 @@
+Saved request snapshot to: C:\Users\Administrator\Desktop\HPC_Projects\OpenTravel\LocalAgentCLI\evaluation\runs\eval_qwen35_4b_20260505_rerun\_tmp_artifacts\llm_skip_repair\tianjin_beijing_request\request.json
+Skipping repair passes (--skip-repair enabled).
+Final plan still has validation issues:
+- Day 2 slot 2 should clearly connect from the previous stop.
+- Day 2 slot 3 should clearly connect from the previous stop.
+Saved plan JSON to: C:\Users\Administrator\Desktop\HPC_Projects\OpenTravel\LocalAgentCLI\evaluation\runs\eval_qwen35_4b_20260505_rerun\_tmp_artifacts\llm_skip_repair\tianjin_beijing_request\plan.json
+Saved human-readable itinerary to: C:\Users\Administrator\Desktop\HPC_Projects\OpenTravel\LocalAgentCLI\evaluation\runs\eval_qwen35_4b_20260505_rerun\_tmp_artifacts\llm_skip_repair\tianjin_beijing_request\plan.md
+
+--- Preview ---
+
+# OpenTravel �г�
+
+**����** | 2026-04-20 �� 2026-04-21
+����: 2 | ��ͨ��ʽ: ������ͨ | Ԥ��: ����
+���밲��: �ʹ�, ������Ѽ
+
+## �� 1 �� (2026-04-20)
+**ס��**: ����
+
+- [1] 08:00-09:30 [T] ��ͨ: ǰ������վ
+  - ���վ
+  - ��������ǰ������վ��Ԥ�ƺ�ʱԼ1.5Сʱ�� ����Լ120Ԫ
+
+- [2] 10:00-12:30 [A] �: �����ʹ�
+  - �ʹ�����Ժ
+  - ����ʹ�����Ժ���ι�̫�͵�к͵���͵Ǭ�幬����Ҫ���������ܻʼ����ɡ� ����Լ60Ԫ
+
+- [3] 12:30-13:30 [M] ����: ��ͣ����Ա�����Ѽ
+  - �ļ��񸣿�Ѽ�꣨�ʹ��꣩
+  - Ʒ�����ڱ�����Ѽ�������˿���ƹϺ����潴������ص���ζ�� ����Լ280Ԫ
+
+- [4] 14:00-16:30 [A] �: ������ɽ��԰
+  - ��ɽ��԰
+  - �ӹʹ����Ų�������ɽ��԰���Ƕ���ͤ���������ȫ��������ʹ�ȫ����Ƭ�� ����Լ0Ԫ
+
+- [5] 17:00-18:00 [T] ��ͨ: ǰ���Ƶ�
+  - ����վ
+  - �Ӿ�ɽ��԰����������վ���������������ǰ��Ԥ���Ƶ����� ����Լ10Ԫ
+
+- [6] 18:00-20:00 [H] ס��: ��ס�Ƶ�
+  - ����վ�����Ƶ�
+  - ������ס��������Ϣ���ɣ�Ϊ�����г���׼���� ����Լ400Ԫ
+
+
+## �� 2 �� (2026-04-21)
+**ס��**: ����
+
+- [1] 08:00-09:00 [T] ��ͨ: ǰ������վ
+  - �Ƶ�
+  - �ӾƵ경��������ĵ���վ��׼����������ǰ����վ�� ����Լ5Ԫ
+
+- [2] 09:00-10:30 [T] ��ͨ: ǰ��������վ
+  - ����վ
+  - ���������򹫽�ǰ��������վ��׼��������� ����Լ10Ԫ
+
+- [3] 10:30-12:00 [T] ��ͨ: ���������������
+  - ������վ
+  - ����G��ͷ�����ӱ�����վ�������վ��Ԥ�ƺ�ʱԼ1.5Сʱ�� ����Լ120Ԫ
+
+- [4] 12:00-13:00 [T] ��ͨ: �ִ����վ
+  - ������վ
+  - �ִ����վ�������г̡� ����Լ0Ԫ
+
+
+Ԥ���ܷ��ã������ˣ�: ����� 1005

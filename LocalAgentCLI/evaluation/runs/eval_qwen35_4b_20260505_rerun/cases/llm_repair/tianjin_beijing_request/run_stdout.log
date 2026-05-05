@@ -1,0 +1,57 @@
+Saved request snapshot to: C:\Users\Administrator\Desktop\HPC_Projects\OpenTravel\LocalAgentCLI\evaluation\runs\eval_qwen35_4b_20260505_rerun\_tmp_artifacts\llm_repair\tianjin_beijing_request\request.json
+Plan validation failed. Trying refine pass 1...
+Plan validation failed. Trying refine pass 2...
+Final plan still has validation issues:
+- Day 1 slot 5 should clearly connect from the previous stop.
+Saved plan JSON to: C:\Users\Administrator\Desktop\HPC_Projects\OpenTravel\LocalAgentCLI\evaluation\runs\eval_qwen35_4b_20260505_rerun\_tmp_artifacts\llm_repair\tianjin_beijing_request\plan.json
+Saved human-readable itinerary to: C:\Users\Administrator\Desktop\HPC_Projects\OpenTravel\LocalAgentCLI\evaluation\runs\eval_qwen35_4b_20260505_rerun\_tmp_artifacts\llm_repair\tianjin_beijing_request\plan.md
+
+--- Preview ---
+
+# OpenTravel �г�
+
+**����** | 2026-04-20 �� 2026-04-21
+����: 2 | ��ͨ��ʽ: ������ͨ | Ԥ��: ����
+���밲��: �ʹ�, ������Ѽ
+
+## �� 1 �� (2026-04-20)
+**ס��**: ����
+
+- [1] 08:00-08:45 [T] ��ͨ: �ִﱱ��վ
+  - ����վ
+  - ���������𳵵��ﱱ��վ��������ס������ ����Լ0Ԫ
+
+- [2] 09:00-09:30 [T] ��ͨ: ǰ���ʹ�
+  - ����վ -> �ʹ�����Ժ
+  - ��������4���߻򹫽�ǰ���ʹ����ܿ��߷�ʱ�Ρ� ����Լ15Ԫ
+
+- [3] 09:30-12:00 [A] �: �����ʹ�
+  - �ʹ�����Ժ
+  - �ι�̫�͵�к͵���͵Ǭ�幬����Ҫ���������ܻʼ����ɡ� ����Լ60Ԫ
+
+- [4] 12:00-13:30 [M] ����: ��ͣ����Ա�����Ѽ
+  - �ļ��񸣿�Ѽ�꣨�ʹ��꣩
+  - Ʒ�����ڱ�����Ѽ�������˿���ƹϺ����潴�� ����Լ180Ԫ
+
+- [5] 13:30-14:15 [T] ��ͨ: ǰ���Ƶ�
+  - �ʹ� -> ����վ�����Ƶ�
+  - ��������2���߻�3����ǰ���Ƶ꣬������һ����г̡� ����Լ10Ԫ
+
+- [6] 14:15-15:00 [H] ס��: ��ס�Ƶ�
+  - ����վ�����Ƶ�
+  - ������ס�������Ĵ����������Ϣ�� ����Լ0Ԫ
+
+
+## �� 2 �� (2026-04-21)
+**ס��**: ����
+
+- [1] 07:30-08:00 [T] ��ͨ: ǰ���Ƶ�ȡ����
+  - �Ƶ� -> ����վ
+  - �ӾƵ����ǰ������վ��׼�����̡� ����Լ0Ԫ
+
+- [2] 08:00-08:45 [T] ��ͨ: ����ǰ�����
+  - ����վ -> ���վ
+  - �����𳵷�����򣬽����ó̡� ����Լ120Ԫ
+
+
+Ԥ���ܷ��ã������ˣ�: ����� 385

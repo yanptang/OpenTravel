@@ -1,0 +1,205 @@
+{
+  "trip_summary": {
+    "origin_city": "衡阳",
+    "destination": "长沙",
+    "start_date": "2026-05-08",
+    "end_date": "2026-05-10",
+    "arrival_mode": "train",
+    "travelers": 2,
+    "transport_mode": "public_transport",
+    "budget_level": "mid",
+    "must_do": [
+      "岳麓山",
+      "橘子洲",
+      "坡子街美食"
+    ]
+  },
+  "days": [
+    {
+      "day": 1,
+      "date": "2026-05-08",
+      "overnight_city": "长沙",
+      "slots": [
+        {
+          "slot_id": 1,
+          "type": "transport",
+          "time_start": "08:00",
+          "time_end": "09:30",
+          "title": "衡阳站前往长沙南站",
+          "location": "衡阳站",
+          "details": "乘坐高铁前往长沙南站，预计耗时约 1.5 小时，抵达后出站步行至地铁 2 号线换乘口。",
+          "estimated_cost_cny": 65,
+          "rationale": "利用上午时间抵达长沙，为第一天行程预留充足准备时间。"
+        },
+        {
+          "slot_id": 2,
+          "type": "activity",
+          "time_start": "10:00",
+          "time_end": "12:00",
+          "title": "游览橘子洲头",
+          "location": "橘子洲头",
+          "details": "乘坐地铁 2 号线直达橘子洲头，在毛主席雕像前拍照留念，随后沿洲头步道漫步，欣赏湘江风光。",
+          "estimated_cost_cny": 10,
+          "rationale": "橘子洲是长沙必打卡地标，上午光线好，适合游览核心景点。"
+        },
+        {
+          "slot_id": 3,
+          "type": "meal",
+          "time_start": "12:00",
+          "time_end": "13:30",
+          "title": "午餐：长沙米粉",
+          "location": "坡子街附近",
+          "details": "在坡子街附近寻找一家老字号米粉店，品尝长沙特色口味辣米粉。",
+          "estimated_cost_cny": 30,
+          "rationale": "午餐选择当地特色小吃，为下午游览岳麓山补充能量。"
+        },
+        {
+          "slot_id": 4,
+          "type": "activity",
+          "time_start": "14:00",
+          "time_end": "17:30",
+          "title": "游览岳麓山",
+          "location": "岳麓山",
+          "details": "从南门进入岳麓山，乘坐索道或步行上山，参观爱晚亭、岳麓书院，俯瞰岳麓山全景。",
+          "estimated_cost_cny": 40,
+          "rationale": "岳麓山是长沙另一大核心景点，下午游览可避开部分人流，享受自然风光。"
+        },
+        {
+          "slot_id": 5,
+          "type": "meal",
+          "time_start": "17:30",
+          "time_end": "18:30",
+          "title": "晚餐：湘菜馆",
+          "location": "岳麓山脚下",
+          "details": "在岳麓山脚下选择一家湘菜馆，品尝剁椒鱼头、辣椒炒肉等经典湘菜。",
+          "estimated_cost_cny": 120,
+          "rationale": "晚餐选择正餐，满足味蕾需求，为第二天行程储备体力。"
+        },
+        {
+          "slot_id": 6,
+          "type": "hotel",
+          "time_start": "18:30",
+          "time_end": "20:00",
+          "title": "入住酒店",
+          "location": "五一广场附近",
+          "details": "入住五一广场附近的酒店，交通便利，方便第二天前往坡子街。",
+          "estimated_cost_cny": 300,
+          "rationale": "五一广场是长沙核心商圈，周边餐饮和交通发达，适合第二天前往坡子街。"
+        }
+      ]
+    },
+    {
+      "day": 2,
+      "date": "2026-05-09",
+      "overnight_city": "长沙",
+      "slots": [
+        {
+          "slot_id": 1,
+          "type": "transport",
+          "time_start": "08:00",
+          "time_end": "08:30",
+          "title": "酒店前往坡子街",
+          "location": "五一广场附近",
+          "details": "步行或乘坐地铁 2 号线前往坡子街，预计耗时 20 分钟。",
+          "estimated_cost_cny": 5,
+          "rationale": "早上出发前往坡子街，避开上午高峰人流。"
+        },
+        {
+          "slot_id": 2,
+          "type": "activity",
+          "time_start": "09:00",
+          "time_end": "11:00",
+          "title": "坡子街美食探索",
+          "location": "坡子街",
+          "details": "在坡子街品尝长沙特色小吃，如糖油粑粑、臭豆腐、口味虾等，感受当地夜市文化。",
+          "estimated_cost_cny": 80,
+          "rationale": "坡子街是长沙美食集中地，上午游览可避开下午人流高峰。"
+        },
+        {
+          "slot_id": 3,
+          "type": "meal",
+          "time_start": "11:00",
+          "time_end": "12:00",
+          "title": "午餐：长沙小吃",
+          "location": "坡子街",
+          "details": "在坡子街附近寻找一家小吃店，品尝长沙特色小吃，如糖油粑粑、臭豆腐、口味虾等。",
+          "estimated_cost_cny": 40,
+          "rationale": "午餐选择当地特色小吃，为下午游览岳麓山补充能量。"
+        },
+        {
+          "slot_id": 4,
+          "type": "transport",
+          "time_start": "12:00",
+          "time_end": "12:30",
+          "title": "坡子街前往岳麓山",
+          "location": "坡子街",
+          "details": "乘坐地铁 2 号线前往岳麓山，预计耗时 30 分钟。",
+          "estimated_cost_cny": 5,
+          "rationale": "从坡子街前往岳麓山，为下午游览岳麓山做准备。"
+        },
+        {
+          "slot_id": 5,
+          "type": "activity",
+          "time_start": "13:00",
+          "time_end": "15:00",
+          "title": "游览岳麓山",
+          "location": "岳麓山",
+          "details": "在岳麓山进行第二次游览，参观岳麓书院、爱晚亭等景点，欣赏湘江风光。",
+          "estimated_cost_cny": 40,
+          "rationale": "岳麓山是长沙必打卡地标，上午游览可避开下午人流高峰。"
+        },
+        {
+          "slot_id": 6,
+          "type": "meal",
+          "time_start": "15:00",
+          "time_end": "16:00",
+          "title": "晚餐：湘菜馆",
+          "location": "岳麓山脚下",
+          "details": "在岳麓山脚下选择一家湘菜馆，品尝剁椒鱼头、辣椒炒肉等经典湘菜。",
+          "estimated_cost_cny": 120,
+          "rationale": "晚餐选择正餐，满足味蕾需求，为第二天行程储备体力。"
+        },
+        {
+          "slot_id": 7,
+          "type": "hotel",
+          "time_start": "16:00",
+          "time_end": "18:00",
+          "title": "入住酒店",
+          "location": "五一广场附近",
+          "details": "入住五一广场附近的酒店，交通便利，方便第二天前往坡子街。",
+          "estimated_cost_cny": 300,
+          "rationale": "五一广场是长沙核心商圈，周边餐饮和交通发达，适合第二天前往坡子街。"
+        }
+      ]
+    },
+    {
+      "day": 3,
+      "date": "2026-05-10",
+      "overnight_city": "长沙",
+      "slots": [
+        {
+          "slot_id": 1,
+          "type": "transport",
+          "time_start": "08:00",
+          "time_end": "08:30",
+          "title": "酒店前往长沙南站",
+          "location": "五一广场附近",
+          "details": "乘坐地铁 2 号线前往长沙南站，预计耗时 30 分钟。",
+          "estimated_cost_cny": 5,
+          "rationale": "早上出发前往长沙南站，为下午返程做准备。"
+        },
+        {
+          "slot_id": 2,
+          "type": "transport",
+          "time_start": "09:00",
+          "time_end": "10:30",
+          "title": "长沙南站前往衡阳站",
+          "location": "长沙南站",
+          "details": "乘坐高铁前往衡阳站，预计耗时约 1.5 小时，抵达衡阳站后结束行程。",
+          "estimated_cost_cny": 65,
+          "rationale": "下午返程，利用剩余时间完成行程，确保准时抵达衡阳。"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "scenario": "llm_skip_repair",
+  "scenario_description_zh": "模型直出基线，跳过 repair。",
+  "request_file": "tianjin_beijing_request.json",
+  "request_path": "C:\\Users\\Administrator\\Desktop\\HPC_Projects\\OpenTravel\\LocalAgentCLI\\inputs\\tianjin_beijing_request.json",
+  "runtime_sec": 47.385,
+  "returncode": 0,
+  "before_error_count": 2,
+  "after_error_count": 2,
+  "before_error_bucket_counts": {
+    "must_do": 0,
+    "time": 0,
+    "transport": 2,
+    "hotel": 0,
+    "mixed_language": 0,
+    "other": 0
+  },
+  "after_error_bucket_counts": {
+    "must_do": 0,
+    "time": 0,
+    "transport": 2,
+    "hotel": 0,
+    "mixed_language": 0,
+    "other": 0
+  },
+  "before_errors": [
+    {
+      "en": "Day 2 slot 2 should clearly connect from the previous stop.",
+      "zh": "第2天，第2个 slot：这段行程没有和上一个地点形成清晰衔接。"
+    },
+    {
+      "en": "Day 2 slot 3 should clearly connect from the previous stop.",
+      "zh": "第2天，第3个 slot：这段行程没有和上一个地点形成清晰衔接。"
+    }
+  ],
+  "after_errors": [
+    {
+      "en": "Day 2 slot 2 should clearly connect from the previous stop.",
+      "zh": "第2天，第2个 slot：这段行程没有和上一个地点形成清晰衔接。"
+    },
+    {
+      "en": "Day 2 slot 3 should clearly connect from the previous stop.",
+      "zh": "第2天，第3个 slot：这段行程没有和上一个地点形成清晰衔接。"
+    }
+  ]
+}

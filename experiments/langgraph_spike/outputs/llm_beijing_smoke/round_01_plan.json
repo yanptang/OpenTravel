@@ -1,0 +1,120 @@
+{
+  "trip_summary": {
+    "origin_city": "天津",
+    "destination": "北京",
+    "start_date": "2026-04-20",
+    "end_date": "2026-04-21",
+    "arrival_mode": "train",
+    "travelers": 2,
+    "transport_mode": "public_transport",
+    "budget_level": "mid",
+    "must_do": [
+      "故宫",
+      "北京烤鸭"
+    ]
+  },
+  "days": [
+    {
+      "day": 1,
+      "date": "2026-04-20",
+      "overnight_city": "北京",
+      "slots": [
+        {
+          "slot_id": 1,
+          "type": "transport",
+          "time_start": "08:00",
+          "time_end": "08:45",
+          "title": "前往北京西站",
+          "location": "天津站",
+          "details": "乘坐高铁前往北京西站，预计耗时45分钟。",
+          "estimated_cost_cny": 50,
+          "rationale": "从天津出发前往北京，利用高铁快速抵达目的地。"
+        },
+        {
+          "slot_id": 2,
+          "type": "activity",
+          "time_start": "09:00",
+          "time_end": "12:00",
+          "title": "游览故宫",
+          "location": "北京市东城区",
+          "details": "参观故宫博物院，主要游览太和殿、中和殿、保和殿及乾清宫等核心区域。",
+          "estimated_cost_cny": 60,
+          "rationale": "满足必做项目，上午时间充裕，适合深度游览。"
+        },
+        {
+          "slot_id": 3,
+          "type": "meal",
+          "time_start": "12:00",
+          "time_end": "13:30",
+          "title": "午餐：尝试北京烤鸭",
+          "location": "北京市东城区",
+          "details": "在故宫附近或前往前门大街附近的中餐馆享用正宗北京烤鸭。",
+          "estimated_cost_cny": 150,
+          "rationale": "满足必做项目，午餐时间适合品尝特色美食。"
+        },
+        {
+          "slot_id": 4,
+          "type": "transport",
+          "time_start": "13:30",
+          "time_end": "14:00",
+          "title": "前往酒店",
+          "location": "北京市东城区",
+          "details": "乘坐地铁或出租车前往酒店，选择靠近地铁站的位置。",
+          "estimated_cost_cny": 20,
+          "rationale": "为下午的活动和晚上住宿做准备，选择交通便利的酒店。"
+        },
+        {
+          "slot_id": 5,
+          "type": "activity",
+          "time_start": "14:00",
+          "time_end": "16:00",
+          "title": "自由活动",
+          "location": "北京市东城区",
+          "details": "在酒店附近或周边区域自由活动，休息或购买纪念品。",
+          "estimated_cost_cny": 0,
+          "rationale": "为下午的活动和晚上住宿做准备，选择交通便利的酒店。"
+        },
+        {
+          "slot_id": 6,
+          "type": "hotel",
+          "time_start": "16:00",
+          "time_end": "16:30",
+          "title": "入住酒店",
+          "location": "北京市东城区",
+          "details": "办理入住手续，休息并准备第二天行程。",
+          "estimated_cost_cny": 300,
+          "rationale": "满足住宿需求，选择靠近地铁站的酒店，方便第二天返程。"
+        }
+      ]
+    },
+    {
+      "day": 2,
+      "date": "2026-04-21",
+      "overnight_city": "天津",
+      "slots": [
+        {
+          "slot_id": 1,
+          "type": "transport",
+          "time_start": "08:00",
+          "time_end": "08:30",
+          "title": "前往北京西站",
+          "location": "酒店",
+          "details": "乘坐地铁或出租车前往北京西站。",
+          "estimated_cost_cny": 20,
+          "rationale": "为返程做准备，选择靠近地铁站的酒店，方便第二天返程。"
+        },
+        {
+          "slot_id": 2,
+          "type": "transport",
+          "time_start": "08:30",
+          "time_end": "10:00",
+          "title": "返回天津",
+          "location": "北京西站",
+          "details": "乘坐高铁返回天津，预计耗时45分钟。",
+          "estimated_cost_cny": 50,
+          "rationale": "结束行程，返回天津。"
+        }
+      ]
+    }
+  ]
+}

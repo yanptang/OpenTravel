@@ -1,0 +1,299 @@
+Saved request snapshot to: C:\Users\Administrator\Desktop\HPC_Projects\OpenTravel\LocalAgentCLI\evaluation\runs\eval_qwen35_4b_20260505_rerun\_tmp_artifacts\no_llm\sample_request\request.json
+Final plan still has validation issues:
+- Day 2 slot 2 transport needs a clear origin and destination.
+- Day 3 slot 2 transport needs a clear origin and destination.
+- Day 4 slot 2 transport needs a clear origin and destination.
+- Day 5 slot 2 transport needs a clear origin and destination.
+- Day 6 slot 2 transport needs a clear origin and destination.
+- Day 7 slot 2 transport needs a clear origin and destination.
+- Day 8 slot 2 transport needs a clear origin and destination.
+- Day 9 slot 2 transport needs a clear origin and destination.
+- Day 10 slot 2 transport needs a clear origin and destination.
+Saved plan JSON to: C:\Users\Administrator\Desktop\HPC_Projects\OpenTravel\LocalAgentCLI\evaluation\runs\eval_qwen35_4b_20260505_rerun\_tmp_artifacts\no_llm\sample_request\plan.json
+Saved human-readable itinerary to: C:\Users\Administrator\Desktop\HPC_Projects\OpenTravel\LocalAgentCLI\evaluation\runs\eval_qwen35_4b_20260505_rerun\_tmp_artifacts\no_llm\sample_request\plan.md
+
+--- Preview ---
+
+# OpenTravel Itinerary
+
+**Iceland** | 2026-05-10 to 2026-05-19
+Travelers: 4 | Mode: Self-drive | Budget: Budget
+Must-do: whale watching, glacier hiking
+
+## Day 1  (2026-05-10)
+**Overnight**: Iceland
+
+- [1] 07:00-10:30 [T] Transport: Fly from Gothenburg to Iceland
+  - Gothenburg -> Iceland����
+  - Arrival-day intercity transfer. Timing is estimated in offline mode. ����Լ3600Ԫ
+
+- [2] 10:30-12:00 [T] Transport: Pick up rental car and drive to city
+  - Iceland���� -> Iceland
+  - Collect rental car at arrival hub and transfer to city center. ����Լ500Ԫ
+
+- [3] 12:00-13:00 [M] Meal: Arrival lunch
+  - Iceland
+  - Light meal near city center before afternoon activity. ����Լ150Ԫ
+
+- [4] 14:00-17:00 [A] Activity: Iceland Day 1 easy intro sightseeing
+  - Iceland Day 1
+  - Low-intensity scenic intro with flexible duration. ����Լ120Ԫ
+
+- [5] 18:30-23:00 [H] Hotel: Check in accommodation
+  - Iceland
+  - 2-bedroom budget guesthouse or apartment. ����Լ1200Ԫ
+
+
+## Day 2  (2026-05-11)
+**Overnight**: Iceland
+
+- [1] 08:00-09:00 [M] Meal: Breakfast
+  - Iceland
+  - Simple breakfast near accommodation. ����Լ60Ԫ
+
+- [2] 09:00-11:00 [T] Transport: Drive to Iceland Day 2 highlights
+  - Iceland Day 2
+  - Public transport transfer. Time is estimated. ����Լ120Ԫ
+
+- [3] 11:30-14:00 [A] Activity: whale watching, glacier hiking themed sightseeing
+  - Iceland Day 2
+  - Main scenic stop with photo time. This day is adjusted to cover: whale watching, glacier hiking. ����Լ180Ԫ
+
+- [4] 14:00-15:00 [M] Meal: Lunch
+  - Iceland Day 2
+  - Local restaurant with flexible menu options. ����Լ120Ԫ
+
+- [5] 15:30-18:00 [A] Activity: Secondary stop
+  - Iceland Day 2
+  - Optional short hike / viewpoint. ����Լ80Ԫ
+
+- [6] 20:00-23:00 [H] Hotel: Check in accommodation
+  - Iceland
+  - 2-bedroom budget guesthouse or apartment. ����Լ1200Ԫ
+
+
+## Day 3  (2026-05-12)
+**Overnight**: Iceland
+
+- [1] 08:00-09:00 [M] Meal: Breakfast
+  - Iceland
+  - Simple breakfast near accommodation. ����Լ60Ԫ
+
+- [2] 09:00-11:00 [T] Transport: Drive to Iceland Day 3 highlights
+  - Iceland Day 3
+  - Public transport transfer. Time is estimated. ����Լ120Ԫ
+
+- [3] 11:30-14:00 [A] Activity: Iceland Day 3 core sightseeing
+  - Iceland Day 3
+  - Main scenic stop with photo time. ����Լ180Ԫ
+
+- [4] 14:00-15:00 [M] Meal: Lunch
+  - Iceland Day 3
+  - Local restaurant with flexible menu options. ����Լ120Ԫ
+
+- [5] 15:30-18:00 [A] Activity: Secondary stop
+  - Iceland Day 3
+  - Optional short hike / viewpoint. ����Լ80Ԫ
+
+- [6] 20:00-23:00 [H] Hotel: Check in accommodation
+  - Iceland
+  - 2-bedroom budget guesthouse or apartment. ����Լ1200Ԫ
+
+
+## Day 4  (2026-05-13)
+**Overnight**: Iceland
+
+- [1] 08:00-09:00 [M] Meal: Breakfast
+  - Iceland
+  - Simple breakfast near accommodation. ����Լ60Ԫ
+
+- [2] 09:00-11:00 [T] Transport: Drive to Iceland Day 4 highlights
+  - Iceland Day 4
+  - Public transport transfer. Time is estimated. ����Լ120Ԫ
+
+- [3] 11:30-14:00 [A] Activity: Iceland Day 4 core sightseeing
+  - Iceland Day 4
+  - Main scenic stop with photo time. ����Լ180Ԫ
+
+- [4] 14:00-15:00 [M] Meal: Lunch
+  - Iceland Day 4
+  - Local restaurant with flexible menu options. ����Լ120Ԫ
+
+- [5] 15:30-18:00 [A] Activity: Secondary stop
+  - Iceland Day 4
+  - Optional short hike / viewpoint. ����Լ80Ԫ
+
+- [6] 20:00-23:00 [H] Hotel: Check in accommodation
+  - Iceland
+  - 2-bedroom budget guesthouse or apartment. ����Լ1200Ԫ
+
+
+## Day 5  (2026-05-14)
+**Overnight**: Iceland
+
+- [1] 08:00-09:00 [M] Meal: Breakfast
+  - Iceland
+  - Simple breakfast near accommodation. ����Լ60Ԫ
+
+- [2] 09:00-11:00 [T] Transport: Drive to Iceland Day 5 highlights
+  - Iceland Day 5
+  - Public transport transfer. Time is estimated. ����Լ120Ԫ
+
+- [3] 11:30-14:00 [A] Activity: Iceland Day 5 core sightseeing
+  - Iceland Day 5
+  - Main scenic stop with photo time. ����Լ180Ԫ
+
+- [4] 14:00-15:00 [M] Meal: Lunch
+  - Iceland Day 5
+  - Local restaurant with flexible menu options. ����Լ120Ԫ
+
+- [5] 15:30-18:00 [A] Activity: Secondary stop
+  - Iceland Day 5
+  - Optional short hike / viewpoint. ����Լ80Ԫ
+
+- [6] 20:00-23:00 [H] Hotel: Check in accommodation
+  - Iceland
+  - 2-bedroom budget guesthouse or apartment. ����Լ1200Ԫ
+
+
+## Day 6  (2026-05-15)
+**Overnight**: Iceland
+
+- [1] 08:00-09:00 [M] Meal: Breakfast
+  - Iceland
+  - Simple breakfast near accommodation. ����Լ60Ԫ
+
+- [2] 09:00-11:00 [T] Transport: Drive to Iceland Day 6 highlights
+  - Iceland Day 6
+  - Public transport transfer. Time is estimated. ����Լ120Ԫ
+
+- [3] 11:30-14:00 [A] Activity: Iceland Day 6 core sightseeing
+  - Iceland Day 6
+  - Main scenic stop with photo time. ����Լ180Ԫ
+
+- [4] 14:00-15:00 [M] Meal: Lunch
+  - Iceland Day 6
+  - Local restaurant with flexible menu options. ����Լ120Ԫ
+
+- [5] 15:30-18:00 [A] Activity: Secondary stop
+  - Iceland Day 6
+  - Optional short hike / viewpoint. ����Լ80Ԫ
+
+- [6] 20:00-23:00 [H] Hotel: Check in accommodation
+  - Iceland
+  - 2-bedroom budget guesthouse or apartment. ����Լ1200Ԫ
+
+
+## Day 7  (2026-05-16)
+**Overnight**: Iceland
+
+- [1] 08:00-09:00 [M] Meal: Breakfast
+  - Iceland
+  - Simple breakfast near accommodation. ����Լ60Ԫ
+
+- [2] 09:00-11:00 [T] Transport: Drive to Iceland Day 7 highlights
+  - Iceland Day 7
+  - Public transport transfer. Time is estimated. ����Լ120Ԫ
+
+- [3] 11:30-14:00 [A] Activity: Iceland Day 7 core sightseeing
+  - Iceland Day 7
+  - Main scenic stop with photo time. ����Լ180Ԫ
+
+- [4] 14:00-15:00 [M] Meal: Lunch
+  - Iceland Day 7
+  - Local restaurant with flexible menu options. ����Լ120Ԫ
+
+- [5] 15:30-18:00 [A] Activity: Secondary stop
+  - Iceland Day 7
+  - Optional short hike / viewpoint. ����Լ80Ԫ
+
+- [6] 20:00-23:00 [H] Hotel: Check in accommodation
+  - Iceland
+  - 2-bedroom budget guesthouse or apartment. ����Լ1200Ԫ
+
+
+## Day 8  (2026-05-17)
+**Overnight**: Iceland
+
+- [1] 08:00-09:00 [M] Meal: Breakfast
+  - Iceland
+  - Simple breakfast near accommodation. ����Լ60Ԫ
+
+- [2] 09:00-11:00 [T] Transport: Drive to Iceland Day 8 highlights
+  - Iceland Day 8
+  - Public transport transfer. Time is estimated. ����Լ120Ԫ
+
+- [3] 11:30-14:00 [A] Activity: Iceland Day 8 core sightseeing
+  - Iceland Day 8
+  - Main scenic stop with photo time. ����Լ180Ԫ
+
+- [4] 14:00-15:00 [M] Meal: Lunch
+  - Iceland Day 8
+  - Local restaurant with flexible menu options. ����Լ120Ԫ
+
+- [5] 15:30-18:00 [A] Activity: Secondary stop
+  - Iceland Day 8
+  - Optional short hike / viewpoint. ����Լ80Ԫ
+
+- [6] 20:00-23:00 [H] Hotel: Check in accommodation
+  - Iceland
+  - 2-bedroom budget guesthouse or apartment. ����Լ1200Ԫ
+
+
+## Day 9  (2026-05-18)
+**Overnight**: Iceland
+
+- [1] 08:00-09:00 [M] Meal: Breakfast
+  - Iceland
+  - Simple breakfast near accommodation. ����Լ60Ԫ
+
+- [2] 09:00-11:00 [T] Transport: Drive to Iceland Day 9 highlights
+  - Iceland Day 9
+  - Public transport transfer. Time is estimated. ����Լ120Ԫ
+
+- [3] 11:30-14:00 [A] Activity: Iceland Day 9 core sightseeing
+  - Iceland Day 9
+  - Main scenic stop with photo time. ����Լ180Ԫ
+
+- [4] 14:00-15:00 [M] Meal: Lunch
+  - Iceland Day 9
+  - Local restaurant with flexible menu options. ����Լ120Ԫ
+
+- [5] 15:30-18:00 [A] Activity: Secondary stop
+  - Iceland Day 9
+  - Optional short hike / viewpoint. ����Լ80Ԫ
+
+- [6] 20:00-23:00 [H] Hotel: Check in accommodation
+  - Iceland
+  - 2-bedroom budget guesthouse or apartment. ����Լ1200Ԫ
+
+
+## Day 10  (2026-05-19)
+**Overnight**: Iceland
+
+- [1] 08:00-09:00 [M] Meal: Breakfast
+  - Iceland
+  - Simple breakfast near accommodation. ����Լ60Ԫ
+
+- [2] 09:00-11:00 [T] Transport: Drive to Iceland Day 10 highlights
+  - Iceland Day 10
+  - Public transport transfer. Time is estimated. ����Լ120Ԫ
+
+- [3] 11:30-14:00 [A] Activity: Iceland Day 10 core sightseeing
+  - Iceland Day 10
+  - Main scenic stop with photo time. ����Լ180Ԫ
+
+- [4] 14:00-15:00 [M] Meal: Lunch
+  - Iceland Day 10
+  - Local restaurant with flexible menu options. ����Լ120Ԫ
+
+- [5] 15:30-18:00 [A] Activity: Secondary stop
+  - Iceland Day 10
+  - Optional short hike / viewpoint. ����Լ80Ԫ
+
+- [6] 20:00-23:00 [H] Hotel: Check in accommodation
+  - Iceland
+  - 2-bedroom budget guesthouse or apartment. ����Լ1200Ԫ
+
+
+Estimated total cost (all people): CNY 21410

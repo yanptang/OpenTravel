@@ -11,6 +11,7 @@ from langgraph.graph import END, StateGraph
 
 ROOT_DIR = Path(__file__).resolve().parents[2]
 LOCAL_AGENT_DIR = ROOT_DIR / "LocalAgentCLI"
+EXPERIMENT_DIR = Path(__file__).resolve().parent
 
 if str(LOCAL_AGENT_DIR) not in sys.path:
     sys.path.insert(0, str(LOCAL_AGENT_DIR))
@@ -273,7 +274,7 @@ def _resolve_input_path(raw_input: str) -> Path:
 def _resolve_artifact_dir(raw_artifact_dir: str) -> Path:
     if raw_artifact_dir:
         return Path(raw_artifact_dir).resolve()
-    return (LOCAL_AGENT_DIR / "outputs" / "langgraph_spike" / "latest").resolve()
+    return (EXPERIMENT_DIR / "outputs" / "latest").resolve()
 
 
 def _load_json(path: Path) -> dict[str, Any]:
